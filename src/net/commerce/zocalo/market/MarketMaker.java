@@ -119,7 +119,7 @@ public abstract class MarketMaker {
         Quantity logOutcomes = new Quantity(Math.log(outcomeCount));
         setBeta(endowment.div(maxPrice()).div(logOutcomes));*/
         
-        /** ANIRBAN LAHA **/
+        /** LAHA **/
         Quantity rootOutcomes = new Quantity(Math.sqrt(outcomeCount));
         setBeta(endowment.div(maxPrice()).div(rootOutcomes.minus(Quantity.ONE)));
         System.out.println("LAHA" + beta.asValue());
