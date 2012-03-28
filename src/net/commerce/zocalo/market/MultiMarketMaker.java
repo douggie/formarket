@@ -5,31 +5,43 @@ package net.commerce.zocalo.market;
 // This software is published under the terms of the MIT license, a copy
 // of which has been included with this distribution in the LICENSE file.
 
-import net.commerce.zocalo.currency.Coupons;
-import net.commerce.zocalo.currency.Quantity;
-import net.commerce.zocalo.currency.Probability;
-import net.commerce.zocalo.currency.Price;
-import net.commerce.zocalo.user.User;
-import net.commerce.zocalo.claim.Position;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import net.commerce.zocalo.ajax.events.MakerTrade;
 import net.commerce.zocalo.ajax.events.PriceChange;
-import net.commerce.zocalo.freechart.ChartScheduler;
-
-import java.util.*;
+import net.commerce.zocalo.claim.Position;
+import net.commerce.zocalo.currency.Coupons;
+import net.commerce.zocalo.currency.Price;
+import net.commerce.zocalo.currency.Probability;
+import net.commerce.zocalo.currency.Quantity;
+import net.commerce.zocalo.user.User;
 
 /** MultiMarketMaker is a MarketMaker for a Multi-position claim.  See {@link MarketMaker} for
     more details */
 public class MultiMarketMaker extends MarketMaker {
     private Map<Position, Probability> probabilities;
+    private Map<Position, Quantity> stocks;
+    private int numOutcomes;
 
     MultiMarketMaker(MultiMarket market, Quantity subsidy, User owner) {
         super(market, subsidy, owner);
         Position[] positions = market.getClaim().positions();
+        numOutcomes = positions.length;
         probabilities = new HashMap<Position, Probability>(positions.length);
+        stocks = new HashMap<Position, Quantity>(positions.length);
         Probability initialValue = new Probability(1.0 / positions.length);
         for (int i = 0; i < positions.length; i++) {
             Position pos = positions[i];
             probabilities.put(pos, initialValue);
+            stocks.put(pos, Quantity.ZERO);
         }
         recordInitialProbabilities(positions, initialValue, owner);
         initBeta(subsidy, positions.length);
@@ -41,6 +53,10 @@ public class MultiMarketMaker extends MarketMaker {
 
     public Probability currentProbability(Position position) {
         return probabilities.get(position);
+    }
+
+    public Quantity currentStock(Position position) {
+        return stocks.get(position);
     }
 
     void recordTrade(String name, Quantity coupons, Quantity cost, Position position, Dictionary<Position, Probability> startProbs) {
@@ -126,14 +142,57 @@ public class MultiMarketMaker extends MarketMaker {
     void setProbability(Position position, Probability probability) {
         probabilities.put(position, probability);
     }
+    
+    void setStock(Position position, Quantity quantity) {
+        stocks.put(position, quantity);
+    }
 
     /** @deprecated */
     public Map getProbabilities() {
         return probabilities;
+    }
+    
+    public Map getStocks() {
+        return stocks;
+    }
+    
+    public Quantity getSumStocks() {
+        Quantity sum = Quantity.ZERO;
+        for(Quantity q : stocks.values()) {
+            sum = sum.plus(q);
+        }
+        return sum;
+    }
+    
+    public Quantity getSumSquaredStocks() {
+        Quantity sum = Quantity.ZERO;
+        for(Quantity q : stocks.values()) {
+            sum = sum.plus(q.times(q));
+        }
+        return sum;
     }
 
     /** @deprecated */
     public void setProbabilities(Map<Position, Probability> probabilities) {
         this.probabilities = probabilities;
     }
+    
+    
+    void setStocks(Map<Position, Quantity> quatities) {
+        this.stocks = quatities;
+    }
+    
+    public Quantity getCostValue() {
+        Quantity b = getBeta();
+        Quantity sumsq = getSumStocks();
+        Quantity n = new Quantity(numOutcomes);
+        Quantity temp = sumsq.times(sumsq).plus(b.times(b).times(n.times(n)));
+        temp = temp.minus(n.times(getSumSquaredStocks()));
+        temp = new Quantity(Math.sqrt(temp.asValue().doubleValue()));
+        //Taking positive form
+        temp = temp.plus(b.times(n)).plus(sumsq);
+        temp = temp.div(n);
+        return temp;
+    }
+    
 }

@@ -6,14 +6,20 @@ package net.commerce.zocalo.market;
 // This software is published under the terms of the MIT license, a copybe
 // of which has been included with this distribution in the LICENSE file.
 
-import net.commerce.zocalo.claim.Position;
-import net.commerce.zocalo.currency.*;
-import net.commerce.zocalo.user.User;
-import net.commerce.zocalo.freechart.ChartScheduler;
-
+import java.math.MathContext;
 import java.util.Dictionary;
 import java.util.Set;
-import java.math.MathContext;
+
+import net.commerce.zocalo.claim.Position;
+import net.commerce.zocalo.currency.Accounts;
+import net.commerce.zocalo.currency.CouponBank;
+import net.commerce.zocalo.currency.Coupons;
+import net.commerce.zocalo.currency.Funds;
+import net.commerce.zocalo.currency.Price;
+import net.commerce.zocalo.currency.Probability;
+import net.commerce.zocalo.currency.Quantity;
+import net.commerce.zocalo.freechart.ChartScheduler;
+import net.commerce.zocalo.user.User;
 
 import org.apache.log4j.Logger;
 
@@ -100,12 +106,23 @@ public abstract class MarketMaker {
     void initBetaExplicit(Quantity endowment, Probability minProbability) {
 //        beta = endowment / Math.log(1.0 / minProbability);
 //        beta = endowment.div(Quantity.ONE.div(minProbability).absLog());
-        setBeta(endowment.div(maxPrice()).div(Quantity.ONE.div(minProbability).absLog()));
+        /** ZOCALO
+         * setBeta(endowment.div(maxPrice()).div(Quantity.ONE.div(minProbability).absLog()));
+         */
+        
+        /** LAHA **/
+        initBeta(endowment, Quantity.ONE.div(minProbability).asValue().doubleValue());
     }
 
     void initBeta(Quantity endowment, double outcomeCount) {
+        /** ZOCALO
         Quantity logOutcomes = new Quantity(Math.log(outcomeCount));
-        setBeta(endowment.div(maxPrice()).div(logOutcomes));
+        setBeta(endowment.div(maxPrice()).div(logOutcomes));*/
+        
+        /** LAHA **/
+        Quantity rootOutcomes = new Quantity(Math.sqrt(outcomeCount));
+        setBeta(endowment.div(maxPrice()).div(rootOutcomes.minus(Quantity.ONE)));
+        System.out.println("LAHA" + beta.asValue());
     }
 
     /** @deprecated */
@@ -374,12 +391,16 @@ public abstract class MarketMaker {
 
     /** The money price charged to move the probability from p to newP is |B * log((1 - newP)/(1 - p)| * couponCost*/
     protected Quantity baseC(Position position, Probability targetProbability) {
-        Probability currentInverted = currentProbability(position).inverted();
+        /** ZOCALO
+         * Probability currentInverted = currentProbability(position).inverted();
         Probability targetInverted = targetProbability.inverted();
         if (targetInverted.isZero() || currentInverted.isZero()) {
             throw new ArithmeticException("probabilities can't be zero or one.");
         }
-        return beta().times(targetInverted.div(currentInverted).absLog());
+        return beta().times(targetInverted.div(currentInverted).absLog());         */
+
+        /** LAHA **/
+        return null;
     }
 
     /** what would the probability be after spending COST?   After spending COST,
@@ -406,6 +427,7 @@ public abstract class MarketMaker {
         Probability curP = currentProbability(position);
         Probability curPNot = curP.inverted();
         Probability newPNot = newP.inverted();
+        System.out.println(beta() + "<-Beta");
         return beta().times(newP.times(curPNot).div(curP.times(newPNot)).absLog());
     }
 
