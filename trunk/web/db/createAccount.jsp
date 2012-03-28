@@ -17,42 +17,44 @@ of which has been included with this distribution in the LICENSE file.
 
 <% createAccount.beginTransaction(); %>
 <% createAccount.processRequest(request, response); %>
-
-      <img src="images/logo.zocalo.jpg" height=81 width=250 align="right"><br>
-
+<p align="center">
+<img src="images/logo.zocalo.jpg" height=81 width=250 align="center"><br>
+</p>
 <p>
 <h2 align="center">Create a new Account</h2>
+</p>
 <p>
 
 <form method=POST action="createAccount.jsp">
-<table border=0 cellpadding="0" cellspacing=5 bgcolor="lightgreen" width=75% align="center">
+<table border=5 cellpadding="0" cellspacing=0  width=50% align="center">
     <tr>
-        <td align=right colspan=2>Desired Account name:
+        <td align=right><font size=5>Username: </font>:
     </td><td>
-        <input type=text size="10" name=userName value='<%= createAccount.getUserNameForWeb() %>'><br><p>
-        </td><td colspan="2"></td>
-    </tr><tr>
-        <td colspan="2"></td><td colspan="2" align=right> Account Password:
-        </td><td colspan="1"><input type=password size="10" name="password">
+        <input type=text size="10" name=userName value='<%= createAccount.getUserNameForWeb() %>'><br>
         </td>
     </tr><tr>
-        <td colspan="2"></td><td colspan="2" align=right> <small>(optional)</small> Retype<br>Account Password:
-        </td>
-        <td colspan="1"><input type=password size="10" name="password2">
-        </td>
+        <td align=right> <font size=5>Account Password: </font>:</td>
+        <td><input type=password size="10" name="password"></td>
     </tr><tr>
-        <td colspan="2" align=right>
-            <p><br>Email Address<br> <small>(confirmation will be required)</small>:
-        </td><td>
+        <td align=right><font size=5>Retype Password: </font>
+        </td>
+        <td><input type=password size="10" name="password2"></td>
+    </tr><tr>
+        <td align=right> <font size=5>Email Address: </font><br> <small>(confirmation will be required) </small>:
+        </td>
+        <td>
             <input type=text size="10" name="emailAddress" value="<%= createAccount.getEmailAddressForWeb() %>">
-        </td><td colspan="2"></td>
+        </td>
     </tr><tr>
-        <td colspan="1">&nbsp;</td> <td align=right><p><input class="smallFontButton" type=submit name=action value="Submit" align=center> </td>
-        <td colspan="3"></td>
+        <td align="center"><input type=submit name=action value="Create Account" align=center> </td>
     </tr>
 </table>
 </form>
+</p>
 
+<hr>
+<font size = 4 color=blue><b>To activate your account, either click on the activation link sent to your email, or type in the confirmation code sent to your email.</b></font>
+<hr>
  <% if (createAccount.hasWarnings()) { %>
     <p align="center" class="userMessage"><%= createAccount.getWarnings() %>
  <% } %>
@@ -60,15 +62,15 @@ of which has been included with this distribution in the LICENSE file.
 <br>
 
 <form method=POST action='createAccount.jsp'>
-    <label> <input type=button name='close' onclick="toggleVisibility('confirmDetails');"> enter confirmation code:</label>
-    <div id='confirmDetails' style='display:none;background:lightgray'>
-        <table border=1 cellpadding="0" cellspacing=3>
-            <tr> <td>Registered name:
-                    <input type=text name='userName' size="10" value='<%= createAccount.getUserNameForWeb() %>'>
-            <tr> <td>Confirmation code from email:
-                <input type="text" size="10" name="confirmation">
+    <label> <input type=button name='close' value='Enter Registration Details' onclick="toggleVisibility('confirmDetails');"></label>
+    <div id='confirmDetails'>
+        <table border=0 cellpadding="0" cellspacing=3>
+            <tr> <td align=right>Registered name: </td>
+                 <td align=left>  <input type=text name='userName' size="10" value='<%= createAccount.getUserNameForWeb() %>'></td>
+            <tr> <td align=right>Confirmation code from email: </td>
+                <td align=left><input type="text" size="10" name="confirmation"></td>
             <tr><td align="center" />
-                <input type=submit class='smallFontButton'  name=action value='Submit'>
+                <input type=button name=action value='Register'>
         </table>
     </div>
 </form>

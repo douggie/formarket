@@ -1,17 +1,21 @@
 package net.commerce.zocalo.market;
 
-import net.commerce.zocalo.claim.MultiClaim;
+import java.util.Dictionary;
+
+import net.commerce.zocalo.ajax.events.BookTrade;
+import net.commerce.zocalo.ajax.events.LimitTrade;
 import net.commerce.zocalo.claim.Claim;
+import net.commerce.zocalo.claim.MultiClaim;
 import net.commerce.zocalo.claim.Position;
-import net.commerce.zocalo.currency.*;
-import net.commerce.zocalo.user.User;
-import net.commerce.zocalo.user.SecureUser;
+import net.commerce.zocalo.currency.CouponBank;
+import net.commerce.zocalo.currency.Funds;
+import net.commerce.zocalo.currency.Price;
+import net.commerce.zocalo.currency.Probability;
+import net.commerce.zocalo.currency.Quantity;
 import net.commerce.zocalo.hibernate.HibernateUtil;
 import net.commerce.zocalo.orders.Order;
-import net.commerce.zocalo.ajax.events.LimitTrade;
-import net.commerce.zocalo.ajax.events.BookTrade;
-
-import java.util.Dictionary;
+import net.commerce.zocalo.user.SecureUser;
+import net.commerce.zocalo.user.User;
 
 // Copyright 2006-2009 Chris Hibbert.  All rights reserved.
 
@@ -113,6 +117,7 @@ public class MultiMarket extends Market {
         if (! quantityPurchased.isZero()) {
             updateLastTraded();
         }
+        maker.setStock(position, maker.currentStock(position).plus(quantityPurchased));
         return quantityPurchased;
     }
 
@@ -125,6 +130,7 @@ public class MultiMarket extends Market {
         if (! quantityPurchased.isZero()) {
             updateLastTraded();
         }
+        maker.setStock(position, maker.currentStock(position).plus(quantityPurchased));
         return quantityPurchased;
     }
 

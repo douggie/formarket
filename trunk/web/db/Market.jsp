@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Zocalo: Available Markets</title>
+<title>Available Markets</title>
 <!--
 Copyright 2007-2009 Chris Hibbert.  All rights reserved.
 Copyright 2005, 2006 CommerceNet Consortium, LLC.  All rights reserved.
@@ -14,6 +14,11 @@ of which has been included with this distribution in the LICENSE file.
     <script type="text/javascript" src="display.js"></script>
 </head>
 <body>
+<p align=center>
+<font size = 7><b> Available Markets</b></font>
+</p>
+<p align=left>
+<font size=5>Below you'll find the markets which are presently active. Select a market.</font>
 
 <% markets.beginTransaction(); %>
 <% markets.processRequest(request, response); %>
@@ -21,7 +26,7 @@ of which has been included with this distribution in the LICENSE file.
 <%= markets.navButtons() %>
 
 <p>
-<h2 align="center">Logged in as <%= markets.getUserName() %></h2>
+<h2 align="center">You're logged in as: <%= markets.getUserName() %></h2>
 <%= markets.getCashBalanceDisplay() %>
 <p>
 
@@ -36,8 +41,8 @@ of which has been included with this distribution in the LICENSE file.
 <br>
 <p>
 
-<table border=0 bgcolor="lightgreen" width="30%">
-    <tr> <td><a href=Welcome.jsp> Logout</a></td> </tr>
+<table border=5 width="30%">
+    <tr> <td><font size=5><b><a href=Welcome.jsp> Logout</a></b></font></td> </tr>
 </table>
 
 </body>
