@@ -9,7 +9,9 @@ import net.commerce.zocalo.ajax.events.PriceChange;
 import net.commerce.zocalo.freechart.ChartScheduler;
 
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 // Copyright 2006-2009 Chris Hibbert.  All rights reserved.
@@ -26,6 +28,13 @@ public class BinaryMarketMaker extends MarketMaker {
         probability = initialProbability;
         Probability minP = probability.min(probability.inverted());
         initBetaExplicit(endowment, minP);
+        Position[] positions = market.getClaim().positions();
+        System.out.println("Number of positions in binary market:" + positions.length);
+        numOutcomes = 2;
+        stocks = new HashMap<Position, Quantity>(positions.length);
+        for (int i = 0; i < numOutcomes; i++) {
+            stocks.put(positions[i], Quantity.ZERO);
+        }
     }
 
     public BinaryMarketMaker() {
@@ -105,4 +114,5 @@ public class BinaryMarketMaker extends MarketMaker {
     public Probability getProbability() {
         return probability;
     }
+
 }

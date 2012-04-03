@@ -95,6 +95,7 @@ public class MultiMarket extends Market {
         if (quantityPurchased.isZero()) {
             user.warn("No transaction was recorded.");
         }
+        maker.setStock(pos, maker.currentStock(pos).plus(quantityPurchased));
 
         return;
     }
@@ -130,7 +131,6 @@ public class MultiMarket extends Market {
         if (! quantityPurchased.isZero()) {
             updateLastTraded();
         }
-        maker.setStock(position, maker.currentStock(position).plus(quantityPurchased));
         return quantityPurchased;
     }
 
