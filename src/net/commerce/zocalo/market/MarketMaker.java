@@ -383,13 +383,23 @@ public abstract class MarketMaker {
         |baseC - incrC| (=totalC) in coupons. */
 
     Quantity incrC(Position position, Probability targetProbability) {
-        return beta().times(targetProbability.div(currentProbability(position)).absLog());
+        /** ZOCALO
+         * return beta().times(targetProbability.div(currentProbability(position)).absLog());
+         */
+        /** LAHA **/
+        return totalC(position, targetProbability).minus(baseC(position, targetProbability));
+        
     }
 
     /** what would the probability be after buying QUANT coupons? */
     private Probability newPFromIncrC(Position position, Quantity quantity) {
-        return new Probability(currentProbability(position).times(quantity.div(beta()).exp()));
+        /** ZOCALO 
+          return new Probability(currentProbability(position).times(quantity.div(beta()).exp()));
 //        return currentProbability(position) * Math.exp(quantity / beta());
+         */
+        
+        /** LAHA **/
+        return null;
     }
 
     /** The money price charged to move the probability from p to newP is |B * log((1 - newP)/(1 - p)| * couponCost*/
@@ -403,23 +413,34 @@ public abstract class MarketMaker {
         return beta().times(targetInverted.div(currentInverted).absLog());         */
 
         /** LAHA **/
-        return null;
+        Probability currentProb = currentProbability(position);
+        Quantity currentCost = getCostValue(position, currentProb);
+        Quantity targetCost = getCostValue(position, targetProbability);
+        return targetCost.minus(currentCost);
     }
 
     /** what would the probability be after spending COST?   After spending COST,
      the user has gained COST new pairs, and will trade the undesired coupons for
-     desireable ones.  The new probability will be (1 - ((1-p)*exp(COST)).   */
+     desirable ones.  The new probability will be (1 - ((1-p)*exp(COST)).   */
     Probability newPFromBaseC(Position position, Quantity cost) {
+        /** ZOCALO 
         Quantity baseC = cost.div(beta());
         Probability curPNot = currentProbability(position).inverted();
-        return new Probability(curPNot.div(baseC.exp())).inverted();
+        return new Probability(curPNot.div(baseC.exp())).inverted();    */
+        
+        /** LAHA **/
+        return null;
     }
 
     private Probability newPFromTotalC(Position position, Quantity totalC) {
+        /** ZOCALO 
         Quantity expTotalC = totalC.div(beta()).exp();
         Probability curProb = currentProbability(position);
         Probability curPNot = curProb.inverted();
-        return new Probability(curProb.div(curProb.plus(curPNot.times(expTotalC))));
+        return new Probability(curProb.div(curProb.plus(curPNot.times(expTotalC)))); **/
+        
+        /** LAHA **/
+        return null;
     }
 
     //  totalC is |baseC - incrC|.  (BaseC and IncrC have opposite signs)
@@ -427,11 +448,18 @@ public abstract class MarketMaker {
     //     totalC = beta * | log((1 - newP) / (1 - p)) / (newProb/prob)) |
     //  so totalC = beta * | log(newP * (1 - p) / (p * (1 - newP))) |
     private Quantity totalC(Position position, Probability newP) {
+        /** ZOCALO 
         Probability curP = currentProbability(position);
         Probability curPNot = curP.inverted();
         Probability newPNot = newP.inverted();
         System.out.println(beta() + "<-Beta");
-        return beta().times(newP.times(curPNot).div(curP.times(newPNot)).absLog());
+        return beta().times(newP.times(curPNot).div(curP.times(newPNot)).absLog()); **/
+        
+        /** LAHA **/
+        Probability curP = currentProbability(position);
+        Quantity currentStock = getStockFromProbability(position, curP);
+        Quantity targetStock = getStockFromProbability(position, newP);
+        return targetStock.minus(currentStock);
     }
 
     /** return my accounts only if the requestor knows my market's couponBank.  Since Market doesn't
