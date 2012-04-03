@@ -8,6 +8,7 @@ package net.commerce.zocalo.market;
 
 import java.math.MathContext;
 import java.util.Dictionary;
+import java.util.Map;
 import java.util.Set;
 
 import net.commerce.zocalo.claim.Position;
@@ -95,6 +96,8 @@ public abstract class MarketMaker {
     private Market market;
     private long id;
     public static final double EPSILON = 0.0001;
+    protected Map<Position, Quantity> stocks;
+    protected int numOutcomes;
 
     public MarketMaker(Market market, Quantity subsidy, User owner) {
         this.market = market;
@@ -495,4 +498,72 @@ public abstract class MarketMaker {
     public Price maxPrice() {
         return getMarket().maxPrice();
     }
+
+    void setStock(Position position, Quantity quantity) {
+        stocks.put(position, quantity);
+    }
+
+    public Map getStocks() {
+        return stocks;
+    }
+    
+    public Quantity getSumStocks() {
+        Quantity sum = Quantity.ZERO;
+        for(Quantity q : stocks.values()) {
+            sum = sum.plus(q);
+        }
+        return sum;
+    }
+    
+    public Quantity getConstantSumStocks(Position position) {
+        Quantity sum = getSumStocks();
+        return sum.minus(stocks.get(position));
+    }
+    
+    public Quantity getSumSquaredStocks() {
+        Quantity sum = Quantity.ZERO;
+        for(Quantity q : stocks.values()) {
+            sum = sum.plus(q.times(q));
+        }
+        return sum;
+    }
+    
+    public Quantity getConstantSumSquaredStocks(Position position) {
+        Quantity sum = getSumSquaredStocks();
+        double sq = Math.sqrt(stocks.get(position).asValue().doubleValue());
+        return sum.minus(new Quantity(sq));
+    }
+
+    
+    void setStocks(Map<Position, Quantity> quatities) {
+        this.stocks = quatities;
+    }
+    
+    public Quantity getCostValue(Position position, Probability p) {
+        Quantity sum = getBeta();
+        double q = getStockFromProbability(position, p).asValue().doubleValue();
+        double const1 = getConstantSumStocks(position).asValue().doubleValue();
+        double prob = p.asValue().doubleValue();
+        double temp = ((q + const1) * prob - q) / (numOutcomes * prob - 1);
+        return sum.plus(new Quantity(temp));
+    }
+    
+    public Quantity getStockFromProbability(Position position, Probability p) {
+        double beta = getBeta().asValue().doubleValue();
+        double temp = Math.pow(numOutcomes * p.asValue().doubleValue() - 1, 2);
+        double const1 = getConstantSumStocks(position).asValue().doubleValue();
+        double const2 = getConstantSumSquaredStocks(position).asValue().doubleValue();
+        double A = (numOutcomes - 1) * (temp + numOutcomes - 1);
+        double B = const1 * (numOutcomes - 1 + temp);
+        double const1sq = const1 * const1;
+        double C = const1sq - temp * (const1sq + beta*beta*numOutcomes*numOutcomes - numOutcomes * const2);
+        double solution = (B + Math.sqrt(B*B - A*C)) / A;
+        return new Quantity(solution);
+    }
+    
+    public Quantity currentStock(Position position) {
+        return stocks.get(position);
+    }
+
+
 }

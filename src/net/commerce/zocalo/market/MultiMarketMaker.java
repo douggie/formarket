@@ -28,8 +28,6 @@ import net.commerce.zocalo.user.User;
     more details */
 public class MultiMarketMaker extends MarketMaker {
     private Map<Position, Probability> probabilities;
-    private Map<Position, Quantity> stocks;
-    private int numOutcomes;
 
     MultiMarketMaker(MultiMarket market, Quantity subsidy, User owner) {
         super(market, subsidy, owner);
@@ -53,10 +51,6 @@ public class MultiMarketMaker extends MarketMaker {
 
     public Probability currentProbability(Position position) {
         return probabilities.get(position);
-    }
-
-    public Quantity currentStock(Position position) {
-        return stocks.get(position);
     }
 
     void recordTrade(String name, Quantity coupons, Quantity cost, Position position, Dictionary<Position, Probability> startProbs) {
@@ -143,56 +137,14 @@ public class MultiMarketMaker extends MarketMaker {
         probabilities.put(position, probability);
     }
     
-    void setStock(Position position, Quantity quantity) {
-        stocks.put(position, quantity);
-    }
-
     /** @deprecated */
     public Map getProbabilities() {
         return probabilities;
     }
     
-    public Map getStocks() {
-        return stocks;
-    }
-    
-    public Quantity getSumStocks() {
-        Quantity sum = Quantity.ZERO;
-        for(Quantity q : stocks.values()) {
-            sum = sum.plus(q);
-        }
-        return sum;
-    }
-    
-    public Quantity getSumSquaredStocks() {
-        Quantity sum = Quantity.ZERO;
-        for(Quantity q : stocks.values()) {
-            sum = sum.plus(q.times(q));
-        }
-        return sum;
-    }
-
     /** @deprecated */
     public void setProbabilities(Map<Position, Probability> probabilities) {
         this.probabilities = probabilities;
-    }
-    
-    
-    void setStocks(Map<Position, Quantity> quatities) {
-        this.stocks = quatities;
-    }
-    
-    public Quantity getCostValue() {
-        Quantity b = getBeta();
-        Quantity sumsq = getSumStocks();
-        Quantity n = new Quantity(numOutcomes);
-        Quantity temp = sumsq.times(sumsq).plus(b.times(b).times(n.times(n)));
-        temp = temp.minus(n.times(getSumSquaredStocks()));
-        temp = new Quantity(Math.sqrt(temp.asValue().doubleValue()));
-        //Taking positive form
-        temp = temp.plus(b.times(n)).plus(sumsq);
-        temp = temp.div(n);
-        return temp;
     }
     
 }

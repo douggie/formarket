@@ -134,6 +134,7 @@ public class BinaryMarket extends Market {
         if (! quantity.approaches(quantityPurchased)) {
             bookRemainderIfAffordable(pos, price, quantity, user, quantityPurchased);
         }
+        maker.setStock(pos, maker.currentStock(pos).plus(quantityPurchased));
     }
 
     protected void buyAtMarketPrice(Position pos, Price price, Quantity quantity, User user) {
@@ -146,6 +147,7 @@ public class BinaryMarket extends Market {
         if (quantityPurchased.isZero()) {
             warnUserNoSale(price, quantity, user);
         }
+        maker.setStock(pos, maker.currentStock(pos).plus(quantityPurchased));
     }
 
     protected Quantity purchaseAtMarketPrice(Position pos, Price price, Quantity quantity, User user) {
