@@ -16,6 +16,7 @@ public class Quantity implements Comparable {
     static final public MathContext NINE_DIGITS = new MathContext(9, RoundingMode.HALF_EVEN);
     static final public MathContext ROUNDING_CONTEXT = new MathContext(NINE_DIGITS.getPrecision() - 3, NINE_DIGITS.getRoundingMode());
     static final public Quantity ZERO = new Quantity(0);
+    static final public Quantity TWO = new Quantity(2);
     static final public Quantity EPSILON = new Quantity(".0001");
     static final public Quantity ONE = new Quantity(BigDecimal.ONE);
     static final public Quantity Q100 = new Quantity("100");
@@ -243,5 +244,9 @@ public class Quantity implements Comparable {
 
     public Quantity floor() {
         return newScale(0);
+    }
+    
+    public Quantity sqrt() {
+        return new Quantity(Math.pow(quant.doubleValue(), 2));
     }
 }
