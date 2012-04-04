@@ -383,63 +383,27 @@ public abstract class MarketMaker {
         |baseC - incrC| (=totalC) in coupons. */
 
     Quantity incrC(Position position, Probability targetProbability) {
-        /** ZOCALO
-         * return beta().times(targetProbability.div(currentProbability(position)).absLog());
-         */
-        /** LAHA **/
-        return totalC(position, targetProbability).minus(baseC(position, targetProbability));
-        
+        return null;
     }
 
     /** what would the probability be after buying QUANT coupons? */
     private Probability newPFromIncrC(Position position, Quantity quantity) {
-        /** ZOCALO 
-          return new Probability(currentProbability(position).times(quantity.div(beta()).exp()));
-//        return currentProbability(position) * Math.exp(quantity / beta());
-         */
-        
-        /** LAHA **/
         return null;
     }
 
     /** The money price charged to move the probability from p to newP is |B * log((1 - newP)/(1 - p)| * couponCost*/
     protected Quantity baseC(Position position, Probability targetProbability) {
-        /** ZOCALO
-         * Probability currentInverted = currentProbability(position).inverted();
-        Probability targetInverted = targetProbability.inverted();
-        if (targetInverted.isZero() || currentInverted.isZero()) {
-            throw new ArithmeticException("probabilities can't be zero or one.");
-        }
-        return beta().times(targetInverted.div(currentInverted).absLog());         */
-
-        /** LAHA **/
-        Probability currentProb = currentProbability(position);
-        Quantity currentCost = getCostValue(position, currentProb);
-        Quantity targetCost = getCostValue(position, targetProbability);
-        return targetCost.minus(currentCost);
+        return null;
     }
 
     /** what would the probability be after spending COST?   After spending COST,
      the user has gained COST new pairs, and will trade the undesired coupons for
      desirable ones.  The new probability will be (1 - ((1-p)*exp(COST)).   */
     Probability newPFromBaseC(Position position, Quantity cost) {
-        /** ZOCALO 
-        Quantity baseC = cost.div(beta());
-        Probability curPNot = currentProbability(position).inverted();
-        return new Probability(curPNot.div(baseC.exp())).inverted();    */
-        
-        /** LAHA **/
         return null;
     }
 
     private Probability newPFromTotalC(Position position, Quantity totalC) {
-        /** ZOCALO 
-        Quantity expTotalC = totalC.div(beta()).exp();
-        Probability curProb = currentProbability(position);
-        Probability curPNot = curProb.inverted();
-        return new Probability(curProb.div(curProb.plus(curPNot.times(expTotalC)))); **/
-        
-        /** LAHA **/
         return null;
     }
 
@@ -448,18 +412,7 @@ public abstract class MarketMaker {
     //     totalC = beta * | log((1 - newP) / (1 - p)) / (newProb/prob)) |
     //  so totalC = beta * | log(newP * (1 - p) / (p * (1 - newP))) |
     private Quantity totalC(Position position, Probability newP) {
-        /** ZOCALO 
-        Probability curP = currentProbability(position);
-        Probability curPNot = curP.inverted();
-        Probability newPNot = newP.inverted();
-        System.out.println(beta() + "<-Beta");
-        return beta().times(newP.times(curPNot).div(curP.times(newPNot)).absLog()); **/
-        
-        /** LAHA **/
-        Probability curP = currentProbability(position);
-        Quantity currentStock = getStockFromProbability(position, curP);
-        Quantity targetStock = getStockFromProbability(position, newP);
-        return targetStock.minus(currentStock);
+        return null;
     }
 
     /** return my accounts only if the requestor knows my market's couponBank.  Since Market doesn't
@@ -535,58 +488,9 @@ public abstract class MarketMaker {
         return stocks;
     }
     
-    public Quantity getSumStocks() {
-        Quantity sum = Quantity.ZERO;
-        for(Quantity q : stocks.values()) {
-            sum = sum.plus(q);
-        }
-        return sum;
-    }
-    
-    public Quantity getConstantSumStocks(Position position) {
-        Quantity sum = getSumStocks();
-        return sum.minus(stocks.get(position));
-    }
-    
-    public Quantity getSumSquaredStocks() {
-        Quantity sum = Quantity.ZERO;
-        for(Quantity q : stocks.values()) {
-            sum = sum.plus(q.times(q));
-        }
-        return sum;
-    }
-    
-    public Quantity getConstantSumSquaredStocks(Position position) {
-        Quantity sum = getSumSquaredStocks();
-        double sq = Math.sqrt(stocks.get(position).asValue().doubleValue());
-        return sum.minus(new Quantity(sq));
-    }
-
     
     void setStocks(Map<Position, Quantity> quatities) {
         this.stocks = quatities;
-    }
-    
-    public Quantity getCostValue(Position position, Probability p) {
-        Quantity sum = getBeta();
-        double q = getStockFromProbability(position, p).asValue().doubleValue();
-        double const1 = getConstantSumStocks(position).asValue().doubleValue();
-        double prob = p.asValue().doubleValue();
-        double temp = ((q + const1) * prob - q) / (numOutcomes * prob - 1);
-        return sum.plus(new Quantity(temp));
-    }
-    
-    public Quantity getStockFromProbability(Position position, Probability p) {
-        double beta = getBeta().asValue().doubleValue();
-        double temp = Math.pow(numOutcomes * p.asValue().doubleValue() - 1, 2);
-        double const1 = getConstantSumStocks(position).asValue().doubleValue();
-        double const2 = getConstantSumSquaredStocks(position).asValue().doubleValue();
-        double A = (numOutcomes - 1) * (temp + numOutcomes - 1);
-        double B = const1 * (numOutcomes - 1 + temp);
-        double const1sq = const1 * const1;
-        double C = const1sq - temp * (const1sq + beta*beta*numOutcomes*numOutcomes - numOutcomes * const2);
-        double solution = (B + Math.sqrt(B*B - A*C)) / A;
-        return new Quantity(solution);
     }
     
     public Quantity currentStock(Position position) {
