@@ -49,7 +49,7 @@ public class MultiMarketMaker extends MarketMaker {
     MultiMarketMaker() {
     }
 
-    public Probability currentProbability(Position position) {
+    public synchronized Probability currentProbability(Position position) {
         return probabilities.get(position);
     }
 
@@ -133,17 +133,17 @@ public class MultiMarketMaker extends MarketMaker {
         setProbability(position, new Probability(totalProb).inverted());
     }
 
-    void setProbability(Position position, Probability probability) {
+    synchronized void setProbability(Position position, Probability probability) {
         probabilities.put(position, probability);
     }
     
     /** @deprecated */
-    public Map getProbabilities() {
+    public synchronized Map getProbabilities() {
         return probabilities;
     }
     
     /** @deprecated */
-    public void setProbabilities(Map<Position, Probability> probabilities) {
+    public synchronized void setProbabilities(Map<Position, Probability> probabilities) {
         this.probabilities = probabilities;
     }
     
