@@ -19,11 +19,11 @@ public class AccountCreationScreen extends LoginScreen {
     static final public String CREATE_ACCOUNT_JSP  = "createAccount.jsp";
     static final public String CREATE_ACCOUNT_NAME = "createAccount";
     static final public String CREATE_ACCOUNT      = "Create Account";
-    static final public String ACCOUNT_NOT_AVAILABLE = "account name not available: ";
-    static final public String LOOK_FOR_CONFIRMATION = "look for an email from us with a confirmation link for you to visit.";
-    static final public String PASSWORD_WARNING    = "Passwords have at least 7 printing characters, with some non-alphabetic.";
+    static final public String ACCOUNT_NOT_AVAILABLE = "Sorry! This account name is unavailable. Please try another one. ";
+    static final public String LOOK_FOR_CONFIRMATION = "We've sent you a confirmation email. To activate your account, please follow the instructions in the email.";
+    static final public String PASSWORD_WARNING    = "Oops! That password doesn't qualify! You must have at least 7 characters, with at least one being a number.";
     static final public String NO_MATCH            = "Confirmation token didn't match account name.";
-    static final public String ACCOUNT_ALREADY_CONFIRMED = "Account already confirmed";
+    static final public String ACCOUNT_ALREADY_CONFIRMED = "Account already confirmed!";
 
     private boolean successfulCreation;
     private String emailAddress;
@@ -40,7 +40,7 @@ public class AccountCreationScreen extends LoginScreen {
         String name = getUserName();
         if (null == name || "".equals(name)) {
             if (null != emailAddress || null != password || null != password2)  {
-                warn("please enter a proposed user name.");
+                warn("Please enter a username.");
             }
             resetPasswords();
             return;
@@ -50,7 +50,7 @@ public class AccountCreationScreen extends LoginScreen {
         if (unconfirmedUser != null) {
             if (confirmation != null) {
                 if (unconfirmedUser.confirm(confirmation)) {
-                    warn("confirmed account for " + name);
+                    warn("Congratulations " + name+"! You're now done. Now Jump in!");
                     successfulCreation = true;
                     redirectResult(request, response);
                 } else {
@@ -73,7 +73,7 @@ public class AccountCreationScreen extends LoginScreen {
         } else if (validateNameAddressPassword()) {
             UnconfirmedUser unconfirmed = createUnconfirmedUser(getUserName(), password, emailAddress, request.getRequestURL().toString());
             if (unconfirmed == null) {
-                warn("Unable to create account.  Please retry or report problems to admin.");
+                warn("Oops! Looks like we encountered a problem creating your account. Please retry.");
             } else {
                 warn(LOOK_FOR_CONFIRMATION);
             }

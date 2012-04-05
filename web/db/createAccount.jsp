@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Zocalo: Create New Account</title>
+<title>SuvamZocalo: Create New Account</title>
 <!--
 Copyright 2007-2009 Chris Hibbert.  All rights reserved.
 
@@ -26,7 +26,7 @@ of which has been included with this distribution in the LICENSE file.
 <p>
 
 <form method=POST action="createAccount.jsp">
-<table border=5 cellpadding="0" cellspacing=0  width=50% align="center">
+<table border=5 cellpadding="0" cellspacing=0  width=90% align="center">
     <tr>
         <td align=right><font size=5>Username: </font>:
     </td><td>
@@ -46,7 +46,7 @@ of which has been included with this distribution in the LICENSE file.
             <input type=text size="10" name="emailAddress" value="<%= createAccount.getEmailAddressForWeb() %>">
         </td>
     </tr><tr>
-        <td align="center"><input type=submit name=action value="Create Account" align=center> </td>
+        <td align="center" colspan=5><input type=submit name=action value="Create Account" align=center> </td>
     </tr>
 </table>
 </form>

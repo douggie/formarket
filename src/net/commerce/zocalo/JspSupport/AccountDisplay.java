@@ -40,13 +40,13 @@ public class AccountDisplay extends UserPage {
 
     public String descriptionHtml() {
         StringBuffer buf = new StringBuffer();
-        buf.append("<h1>" + getUserName() + "</h1>");
+        buf.append("<p align=center><font size=7 color=blue><b><i> Welcome, " + getUserName() + ", to the Marketplace!</i></b></font></p>");
 
         SecureUser user = getUser();
         if (user == null) {
             return "Please login via the market page.";
         }
-        buf.append(HtmlSimpleElement.labelledLine("Cash", "$" + user.cashOnHand().printAsDollars()));
+        buf.append(HtmlSimpleElement.labelledLine("<font size=5 color=red><b>Your available Cash is ", "$" + user.cashOnHand().printAsDollars())+" </b></font>");
 
         user.displayAccounts(buf, allHoldingsPrinter(user));
 
