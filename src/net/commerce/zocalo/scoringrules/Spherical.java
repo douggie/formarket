@@ -10,29 +10,37 @@ import net.commerce.zocalo.currency.Quantity;
 public class Spherical extends ScoringRule {
     private final static double ERROR = 0.0005;
     
-    public static Quantity incrC(Position position, Probability curP,
-            Probability targetP, Map<Position, Quantity> stocks, int numOutcomes) {
-        return totalC(position, curP, targetP, stocks, numOutcomes).minus(baseC(position, curP, targetP, stocks, numOutcomes));
+    public Spherical(Quantity endowment, Quantity maxPrice, int num) {
+        this.numOutcomes = num;
+        initBeta(endowment, maxPrice);
     }
     
-    public static initBeta()
-
-    public static Quantity baseC(Position position, Probability curP,
-            Probability targetP, Map<Position, Quantity> stocks, int numOutcomes) {
+    protected void initBeta(Quantity endowment, Quantity maxPrice) {
+        Quantity rootOutcomes = new Quantity(Math.sqrt(numOutcomes));
+        this.beta = endowment.div(maxPrice).div(rootOutcomes.minus(Quantity.ONE)).asValue().doubleValue();
+    }
+    
+    public Quantity incrC(Position position, Probability curP,
+            Probability targetP, Map<Position, Quantity> stocks) {
+        return totalC(position, curP, targetP, stocks).minus(baseC(position, curP, targetP, stocks));
+    }
+    
+    public Quantity baseC(Position position, Probability curP,
+            Probability targetP, Map<Position, Quantity> stocks) {
         Quantity currentCost = getCostValue(position, curP, beta, numOutcomes, stocks);
         Quantity targetCost = getCostValue(position, targetP, beta, numOutcomes, stocks);
         return targetCost.minus(currentCost);
     }
 
-    public static Quantity totalC(Position position, Probability curP,
-            Probability targetP, Map<Position, Quantity> stocks, int numOutcomes) {
+    public Quantity totalC(Position position, Probability curP,
+            Probability targetP, Map<Position, Quantity> stocks) {
         Quantity currentStock = getStockFromProbability(position, curP, beta, numOutcomes, stocks);
         Quantity targetStock = getStockFromProbability(position, targetP, beta, numOutcomes, stocks);
         return targetStock.minus(currentStock);
     }
 
-    public static Probability newPFromIncrC(Position position, Quantity limitQuant,
-            Probability curP, Map<Position, Quantity> stocks, int numOutcomes) {
+    public Probability newPFromIncrC(Position position, Quantity limitQuant,
+            Probability curP, Map<Position, Quantity> stocks) {
         Map<Position, Quantity> newq = new HashMap<Position, Quantity>(stocks);
         Map<Position, Quantity> newqa = new HashMap<Position, Quantity>(stocks);
         double limit = limitQuant.asValue().doubleValue();
@@ -77,7 +85,7 @@ public class Spherical extends ScoringRule {
         return findNewP(position, newq, beta, numOutcomes);
     }
 
-    private static Probability findNewP(Position position, Map<Position, Quantity> newq, double beta, int numOutcomes) {
+    private Probability findNewP(Position position, Map<Position, Quantity> newq, double beta, int numOutcomes) {
         double sumq1 = getSumStocks(newq,1);
         double sumq2 = getSumStocks(newq,2);
         double n = numOutcomes;
@@ -87,8 +95,8 @@ public class Spherical extends ScoringRule {
         return new Probability((1/n + (sumq1 - n*qi)/(n*Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2))));
     }
 
-    public static Probability newPFromBaseC(Position position, Quantity limitQuant,
-            Probability curP, Map<Position, Quantity> stocks, int numOutcomes) {
+    public Probability newPFromBaseC(Position position, Quantity limitQuant,
+            Probability curP, Map<Position, Quantity> stocks) {
         Map<Position, Quantity> newq = new HashMap<Position, Quantity>(stocks);
         Map<Position, Quantity> newqa = new HashMap<Position, Quantity>(stocks);
         double limit = limitQuant.asValue().doubleValue();
@@ -127,8 +135,8 @@ public class Spherical extends ScoringRule {
         return findNewP(position, newq, beta, numOutcomes);
     }
 
-    public static Probability newPFromTotalC(Position position, Quantity limit,
-            Probability curP, Map<Position, Quantity> stocks, int numOutcomes) {
+    public Probability newPFromTotalC(Position position, Quantity limit,
+            Probability curP, Map<Position, Quantity> stocks) {
         Map<Position, Quantity> newq = new HashMap<Position, Quantity>(stocks);
         
         newq.put(position, stocks.get(position).plus(limit));
@@ -137,11 +145,11 @@ public class Spherical extends ScoringRule {
     }
 
 
-    public static double getSumStocks(int power, Map<Position, Quantity> stocks) {
+    public double getSumStocks(int power, Map<Position, Quantity> stocks) {
         return getSumStocks(stocks, power);
     }
     
-    public static double getSumStocks(Map<Position, Quantity> stockMap, int power) {
+    public double getSumStocks(Map<Position, Quantity> stockMap, int power) {
         double sum = 0;
         for(Quantity q : stockMap.values()) {
             double term = Math.pow(q.asValue().doubleValue(), power);
@@ -150,13 +158,13 @@ public class Spherical extends ScoringRule {
         return sum;
     }
     
-    public static double getConstantSumStocks(Position position, int power, Map<Position, Quantity> stocks) {
+    public double getConstantSumStocks(Position position, int power, Map<Position, Quantity> stocks) {
         double sum = getSumStocks(power, stocks);
         double value = Math.pow(stocks.get(position).asValue().doubleValue(), power);
         return sum - value;
     }
     
-    public static Quantity getCostValue(Position position, Probability p, double beta, int numOutcomes, Map<Position, Quantity> stocks) {
+    public Quantity getCostValue(Position position, Probability p, double beta, int numOutcomes, Map<Position, Quantity> stocks) {
         Quantity sum = new Quantity(beta);
         double q = getStockFromProbability(position, p, beta, numOutcomes, null).asValue().doubleValue();
         double const1 = getConstantSumStocks(position, 1, stocks);
@@ -165,7 +173,7 @@ public class Spherical extends ScoringRule {
         return sum.plus(new Quantity(temp));
     }
     
-    public static Quantity getStockFromProbability(Position position, Probability p, double beta, int numOutcomes, Map<Position, Quantity> stocks) {
+    public Quantity getStockFromProbability(Position position, Probability p, double beta, int numOutcomes, Map<Position, Quantity> stocks) {
         double temp = Math.pow(numOutcomes * p.asValue().doubleValue() - 1, 2);
         double const1 = getConstantSumStocks(position, 1, stocks);
         double const2 = getConstantSumStocks(position, 2, stocks);
@@ -177,7 +185,7 @@ public class Spherical extends ScoringRule {
         return new Quantity(solution);
     }
     
-    private static double C(Map<Position, Quantity> q, double beta, int numOutcomes){
+    private double C(Map<Position, Quantity> q, double beta, int numOutcomes){
         double sumq1 = getSumStocks(q,1);
         double sumq2 = getSumStocks(q,2);
         double n = numOutcomes;
@@ -185,5 +193,5 @@ public class Spherical extends ScoringRule {
         
         return (sumq1/n + b + Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)/n);
     }
-    
+
 }
