@@ -7,12 +7,20 @@ import java.util.Map;
 
 public abstract class ScoringRule {
     
-    public abstract static Quantity incrC(Position position, Probability curP, Probability targetP, Map<Position, Quantity> stocks, int numOutcomes);
-    public abstract static Quantity baseC(Position position, Probability curP, Probability targetP, Map<Position, Quantity> stocks, int numOutcomes);
-    public abstract static Quantity totalC(Position position, Probability curP, Probability targetP, Map<Position, Quantity> stocks, int numOutcomes);
+    protected double beta;
+    protected int numOutcomes;
     
-    public abstract static Probability newPFromIncrC(Position position, Quantity limit, Probability curP, Map<Position, Quantity> stocks, int numOutcomes);
-    public abstract static Probability newPFromBaseC(Position position, Quantity limit, Probability curP, Map<Position, Quantity> stocks, int numOutcomes);
-    public abstract static Probability newPFromTotalC(Position position, Quantity limit, Probability curP, Map<Position, Quantity> newParam, int numOutcomes);
+    protected abstract void initBeta(Quantity endowment, Quantity maxPrice);
+    protected Quantity getBeta(){
+        return new Quantity(beta);
+    }
+    
+    public abstract Quantity incrC(Position position, Probability curP, Probability targetP, Map<Position, Quantity> stocks);
+    public abstract Quantity baseC(Position position, Probability curP, Probability targetP, Map<Position, Quantity> stocks);
+    public abstract Quantity totalC(Position position, Probability curP, Probability targetP, Map<Position, Quantity> stocks);
+    
+    public abstract Probability newPFromIncrC(Position position, Quantity limit, Probability curP, Map<Position, Quantity> stocks);
+    public abstract Probability newPFromBaseC(Position position, Quantity limit, Probability curP, Map<Position, Quantity> stocks);
+    public abstract Probability newPFromTotalC(Position position, Quantity limit, Probability curP, Map<Position, Quantity> newParam);
 
 }
