@@ -40,7 +40,7 @@ public class BinaryMarketMaker extends MarketMaker {
     public BinaryMarketMaker() {
     }
 
-    public Probability currentProbability(Position position) {
+    public synchronized Probability currentProbability(Position position) {
         BinaryMarket market = (BinaryMarket) getMarket();
         if (position == market.getBinaryClaim().getYesPosition()) {
             return getProbability();
@@ -106,12 +106,12 @@ public class BinaryMarketMaker extends MarketMaker {
     }
 
     /** @deprecated */
-    public void setProbability(Probability probability) {
+    public synchronized void setProbability(Probability probability) {
         this.probability = probability;
     }
 
     /** @deprecated */
-    public Probability getProbability() {
+    public synchronized Probability getProbability() {
         return probability;
     }
 

@@ -463,20 +463,20 @@ public abstract class MarketMaker {
         return getMarket().maxPrice();
     }
 
-    void setStock(Position position, Quantity quantity) {
+    synchronized void setStock(Position position, Quantity quantity) {
         stocks.put(position, quantity);
     }
 
-    public Map getStocks() {
+    public synchronized Map getStocks() {
         return stocks;
     }
     
     
-    void setStocks(Map<Position, Quantity> quatities) {
+    synchronized void setStocks(Map<Position, Quantity> quatities) {
         this.stocks = quatities;
     }
     
-    public Quantity currentStock(Position position) {
+    public synchronized Quantity currentStock(Position position) {
         return stocks.get(position);
     }
 
