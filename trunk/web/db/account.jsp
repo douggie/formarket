@@ -15,12 +15,9 @@ of which has been included with this distribution in the LICENSE file.
 </head>
 <body>
 <p align=center>
-<image src="images/panorama.jpg" height = 400 width=1100 align=center>
+<image src="images/Logo/iisclogo.jpg" height = 400 width=1100 align=center>
 </p>
 <hr noshade>
-<p align=center>
-<font size=7 color=blue><i><b> Welcome to the Marketplace!</i></b></font>
-</p>
 
 <p align=left>
 
@@ -29,7 +26,7 @@ of which has been included with this distribution in the LICENSE file.
 <% account.processRequest(request, response); %>
 
 <%= account.navButtons("account.jsp") %>
-<font size=5><b>Your account details are as follows: </b></font>
+
 <%= account.descriptionHtml() %>
 
 <p> </p>

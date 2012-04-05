@@ -15,18 +15,9 @@ of which has been included with this distribution in the LICENSE file.
 <% login.beginTransaction(); %>
 <% login.processRequest(request, response); %>
 
-<table border=0 cellspacing=0 cellpadding=50 width="90%" > <tbody>
-  <tr> <td align="left">
-        <img src="images/logo.zocalo.jpg" height=100 width=250 align="top" >
-       </td>
-       <td align="center">
-       <img src="images/csa-logo.png" height=100 width=200 align="top">
-       </td>
-       <td align="right">
-       <img src="images/Wall_Street.jpg" height=100 width=250 align="top">
-       </td>
-  </tr>
-  </table>
+<p align="center">
+<img src="images/Logo/mainlogo.gif">
+</p>
   
   <p align="center">
   <table border=5 width="90%">
@@ -64,6 +55,16 @@ of which has been included with this distribution in the LICENSE file.
     <tr> <td align="center"><font size=4>If you're a new user, <a href="createAccount.jsp"> click here to create a new Account</a>.</font></td>
     </tr>
 </tbody></table>
+</p>
+
+<p>
+<table>
+	<tr>
+		<td align="left"><img src="images/champ08.jpg"></td>
+		<td align="center"><img src="images/champ09.jpg"></td>
+		<td align="right"><img src="images/champ10.jpg"></td>
+	</tr>
+</table>
 
 </body>
 </html>

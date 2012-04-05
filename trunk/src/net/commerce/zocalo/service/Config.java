@@ -68,7 +68,7 @@ public class Config {
         props.putAll(allProperties);
         tpl.setAttributes(props);
         String name = props.getProperty("userName");
-        String subject = "Please Register your new account, " + name;
+        String subject = "Please register your IPL account, " + name;
         MailUtil.sendSMTPMail(props, emailAddress, subject, tpl.toString(), false);
     }
 
