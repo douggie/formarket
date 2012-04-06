@@ -48,7 +48,7 @@ public class ClaimPurchase extends UserPage {
     static final public String TRADE_FIELD_LABEL = "Trade";
     static final public String REFRESH_FIELD_LABEL = "Refresh";
     private boolean useCookie = false;
-    private int chartSize = 250;
+    private int chartSize = 500;
     private String close = "";
     private String positionName = "";
     public final String TradeHistoryLabel = "Trading History";

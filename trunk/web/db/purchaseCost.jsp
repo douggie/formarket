@@ -19,7 +19,7 @@ of which has been included with this distribution in the LICENSE file.
 <% claim.beginTransaction(); %>
 <% claim.processRequest(request, response); %>
 <hr>
-<font size=5 color=blue><b><%= claim.navButtons() %>  Welcome, <%= claim.getUserName() %></font></b>.
+<p align=center><font size=5 color=blue><b><i><%= claim.navButtons() %>  Welcome, <%= claim.getUserName() %>!</i></font></b></p>.
 
 <br>
 <h1 align="center"><%= claim.displayClaimName() %></h1>
