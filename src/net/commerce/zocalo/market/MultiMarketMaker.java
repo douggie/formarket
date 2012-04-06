@@ -200,6 +200,7 @@ public class MultiMarketMaker extends MarketMaker {
     }
 
     Quantity incrC(Position position, Probability targetProbability) {
+        numOutcomes = market.getClaim().positions().length;
         Quantity q = Spherical.incrC(position, currentProbability(position), targetProbability, stocks, getBetaSpherical(), numOutcomes);
         System.out.println("Calculated q incrC:" + q);
         return q;
@@ -207,6 +208,7 @@ public class MultiMarketMaker extends MarketMaker {
 
     /** what would the probability be after buying QUANT coupons? */
     private Probability newPFromIncrC(Position position, Quantity quantity) {
+        numOutcomes = market.getClaim().positions().length;
         Probability prob = Spherical.newPFromIncrC(position, quantity, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
         System.out.println("Calculated newPFromIncrC:" + prob);
         return prob;
@@ -214,6 +216,7 @@ public class MultiMarketMaker extends MarketMaker {
 
     /** The money price charged to move the probability from p to newP is |B * log((1 - newP)/(1 - p)| * couponCost*/
     protected Quantity baseC(Position position, Probability targetProbability) {
+        numOutcomes = market.getClaim().positions().length;
         System.out.println("Stocks baseC:" + stocks);
         Quantity q = Spherical.baseC(position, currentProbability(position), targetProbability, stocks, getBetaSpherical(), numOutcomes);
         System.out.println("Calculated q baseC:" + q);
@@ -224,12 +227,14 @@ public class MultiMarketMaker extends MarketMaker {
      the user has gained COST new pairs, and will trade the undesired coupons for
      desirable ones.  The new probability will be (1 - ((1-p)*exp(COST)).   */
     Probability newPFromBaseC(Position position, Quantity cost) {
+        numOutcomes = market.getClaim().positions().length;
         Probability prob = Spherical.newPFromBaseC(position, cost, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
         System.out.println("Calculated newPFromBaseC:" + prob);
         return prob;
     }
 
     private Probability newPFromTotalC(Position position, Quantity totalC) {
+        numOutcomes = market.getClaim().positions().length;
         Probability prob = Spherical.newPFromTotalC(position, totalC, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
         System.out.println("Calculated newPFromTotalC:" + prob);
         return prob;
