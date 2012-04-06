@@ -94,6 +94,7 @@ import org.apache.log4j.Logger;
   */
 
 public abstract class MarketMaker {
+    private Quantity beta; //unused
     private Accounts accounts;
     private Market market;
     private long id;
@@ -480,5 +481,21 @@ public abstract class MarketMaker {
         return stocks.get(position);
     }
 
+    //Also unused except in hibernate
+    Quantity beta() {
+        return getBeta();
+    }
 
+    /** @deprecated */
+    //Also unused except in hibernate
+    public void setBeta(Quantity beta) {
+        this.beta = beta;
+    }
+
+    /** @deprecated */
+    //Also unused except in hibernate
+    private Quantity getBeta() {
+        // TODO Auto-generated method stub
+        return beta;
+    }
 }
