@@ -384,7 +384,7 @@ public abstract class MarketMaker {
     }
 
     /** what would the probability be after buying QUANT coupons? */
-    private Probability newPFromIncrC(Position position, Quantity quantity) {
+    protected Probability newPFromIncrC(Position position, Quantity quantity) {
         return null;
     }
 
@@ -400,7 +400,7 @@ public abstract class MarketMaker {
         return null;
     }
 
-    private Probability newPFromTotalC(Position position, Quantity totalC) {
+    protected Probability newPFromTotalC(Position position, Quantity totalC) {
         return null;
     }
 
@@ -408,7 +408,7 @@ public abstract class MarketMaker {
     //  baseC = beta*|log((1 - newP) / (1 - p))|      incrC =  beta*|log(newProb/prob)|
     //     totalC = beta * | log((1 - newP) / (1 - p)) / (newProb/prob)) |
     //  so totalC = beta * | log(newP * (1 - p) / (p * (1 - newP))) |
-    private Quantity totalC(Position position, Probability newP) {
+    protected Quantity totalC(Position position, Probability newP) {
         return null;
     }
 
