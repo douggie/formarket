@@ -39,8 +39,10 @@ public class MultiMarket extends Market {
     }
 
     public MultiMarketMaker makeMarketMaker(Quantity endowment, User owner) {
+        System.out.println("makeMarketMaker");
         if (maker == null) {
             maker = new MultiMarketMaker(this, endowment, owner);
+            System.out.println("marketmaker:" + maker);
             if (maker.cashInAccount().compareTo(endowment) != 0) {
                 maker = null;
                 return null;
@@ -114,6 +116,7 @@ public class MultiMarket extends Market {
             warnMarketClosedCostLimit(position, price, costLimit, user);
             return Quantity.ZERO;
         }
+        System.out.println("Stock:" + ((MultiMarketMaker) getMaker()).getStocks().get(position));
         Quantity quantityPurchased = getMaker().buyWithCostLimit(position, price.asProbability(), costLimit, user);
         if (! quantityPurchased.isZero()) {
             updateLastTraded();
