@@ -29,7 +29,7 @@ import java.util.Iterator;
 public class MarketDisplay extends UserPage {
     final static public String MARKET_JSP = "Market.jsp";
     final static public String MARKET_NAME = "Market";
-    final static public String PAGE_TITLE = "All Markets";
+    final static public String PAGE_TITLE = "Enter the arena!";
 
     final static private String ORDERS_TABLE_HEADER =
             "<table id='orders_table' width='30%' align='center' border='0' cellspacing='2'>\n";

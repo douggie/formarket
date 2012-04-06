@@ -361,14 +361,11 @@ public class HtmlSimpleElement implements HtmlElement {
 
     public static String navButtonTable(String[] labels, String currentPage) {
         StringBuffer buf = new StringBuffer();
-        buf.append("<a href=\"http://zocalo.sourceforge.net\">");
-        buf.append("<img src=\"images/logo.zocalo-trim.PNG\" alt=\"http://zocalo.sourceforge.net\" align=\"right\" border=\"0\" height=\"50\">");
-        buf.append("</a>");
         HtmlTable invisibleTable = new HtmlTable();
         invisibleTable.add("cellpadding", 0);
         invisibleTable.add("border", 0);
         invisibleTable.render(buf);
-        buf.append("\n    ");
+        buf.append("\n <hr>    ");
         HtmlRow.startTag(buf);
         for (int i = 0; i < labels.length; i = i + 2) {
             String page = labels[i];
@@ -377,6 +374,10 @@ public class HtmlSimpleElement implements HtmlElement {
                     + HtmlSimpleElement.newPageForm(page, label, page.equals(currentPage))
                     + "\n    </td>");
         }
+        buf.append("<td>"+HtmlSimpleElement.newPageForm("Welcome.jsp", "Logout", "Welcome.jsp".equals(currentPage))+"</td>");
+        buf.append("<td>"+HtmlSimpleElement.newPageForm("Help.html", "Help", "Help.jsp".equals(currentPage))+"</td>");
+        buf.append("<td>"+HtmlSimpleElement.newPageForm("Credits.html", "Credits", "Credits.html".equals(currentPage))+"</td>");
+        buf.append("<hr>");
         HtmlRow.endTag(buf);
         buf.append("\n<tr><td colspan='" + labels.length / 2 + "'><span id='belowNavButtons'>&nbsp;</span></td></tr>\n");
         HtmlTable.endTag(buf);
