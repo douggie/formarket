@@ -15,7 +15,7 @@ of which has been included with this distribution in the LICENSE file.
 </head>
 <body>
 <p align=center>
-<image src="images/Logo/iisclogo.jpg" height = 400 width=1100 align=center>
+<image src="images/Logo/iisclogo.jpg" height = 400 width=800 align=center>
 </p>
 <hr noshade>
 

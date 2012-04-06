@@ -41,9 +41,5 @@ of which has been included with this distribution in the LICENSE file.
 <br>
 <p>
 
-<table border=5 width="30%">
-    <tr> <td><font size=5><b><a href=Welcome.jsp> Logout</a></b></font></td> </tr>
-</table>
-
 </body>
 </html>

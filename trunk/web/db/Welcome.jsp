@@ -57,14 +57,10 @@ of which has been included with this distribution in the LICENSE file.
 </tbody></table>
 </p>
 
-<p>
-<table>
-	<tr>
-		<td align="left"><img src="images/champ08.jpg"></td>
-		<td align="center"><img src="images/champ09.jpg"></td>
-		<td align="right"><img src="images/champ10.jpg"></td>
-	</tr>
-</table>
+<p align=center>
+<img src="images/Logo/csk2011.jpg">
+</p>
+
 
 </body>
 </html>
