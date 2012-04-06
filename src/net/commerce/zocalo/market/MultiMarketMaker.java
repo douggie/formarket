@@ -22,15 +22,20 @@ import net.commerce.zocalo.currency.Coupons;
 import net.commerce.zocalo.currency.Price;
 import net.commerce.zocalo.currency.Probability;
 import net.commerce.zocalo.currency.Quantity;
+import net.commerce.zocalo.scoringrules.Logarithmic;
+import net.commerce.zocalo.scoringrules.Quadratic;
+import net.commerce.zocalo.scoringrules.Spherical;
 import net.commerce.zocalo.user.User;
 
 /** MultiMarketMaker is a MarketMaker for a Multi-position claim.  See {@link MarketMaker} for
     more details */
 public class MultiMarketMaker extends MarketMaker {
     private Map<Position, Probability> probabilities;
+    protected Map<Position, Quantity> stocks;
 
     MultiMarketMaker(MultiMarket market, Quantity subsidy, User owner) {
         super(market, subsidy, owner);
+        System.out.println("constructor multimarket");
         Position[] positions = market.getClaim().positions();
         numOutcomes = positions.length;
         probabilities = new HashMap<Position, Probability>(positions.length);
@@ -41,12 +46,42 @@ public class MultiMarketMaker extends MarketMaker {
             probabilities.put(pos, initialValue);
             stocks.put(pos, Quantity.ZERO);
         }
-        recordInitialProbabilities(positions, initialValue, owner);
+        recordInitialProbabilities(positions, initialValue, owner, stocks);
+        System.out.println("stocks:" + stocks);
+        System.out.println("probabilities:" + probabilities);
         initBeta(subsidy, positions.length);
     }
 
     /** @deprecated */
     MultiMarketMaker() {
+    }
+
+    void initBeta(Quantity endowment, int outcomeCount) {
+        System.out.println("Initing beta");
+        initBetaLog(endowment, outcomeCount, maxPrice());
+        initBetaQuad(endowment, outcomeCount, maxPrice());
+        initBetaSphere(endowment, outcomeCount, maxPrice());
+    }
+    
+    private void initBetaSphere(Quantity endowment, int outcomeCount,
+            Price maxPrice) {
+        System.out.println("Initing betaS");
+        Quantity rootOutcomes = new Quantity(Math.sqrt(numOutcomes));
+        setBetaSpherical(endowment.div(maxPrice).div(rootOutcomes.minus(Quantity.ONE)));
+    }
+
+    private void initBetaQuad(Quantity endowment, int outcomeCount,
+            Price maxPrice) {
+        System.out.println("Initing betaQ");
+        setBetaQuadratic(endowment.times(new Quantity(numOutcomes)).div(new Quantity(numOutcomes-1)).div(maxPrice));
+    }
+
+    private void initBetaLog(Quantity endowment, int outcomeCount,
+            Price maxPrice) {
+        System.out.println("Initing betaL");
+        Quantity logOutcomes = new Quantity(Math.log(numOutcomes));
+        setBeta(endowment.div(maxPrice).div(logOutcomes));
+        
     }
 
     public synchronized Probability currentProbability(Position position) {
@@ -75,11 +110,11 @@ public class MultiMarketMaker extends MarketMaker {
         new PriceChange(position.getClaim().getName(), currentProbabilities(position));
     }
 
-    private void recordInitialProbabilities(Position[] positions, Probability initialValue, User owner) {
+    private void recordInitialProbabilities(Position[] positions, Probability initialValue, User owner, Map<Position, Quantity> stocks) {
         for (int i = 0; i < positions.length; i++) {
             Position position = positions[i];
             Price scaledPrice = scaleToPrice(initialValue);
-            MakerTrade.newMakerTrade(owner.getName(), scaledPrice, Quantity.ZERO, position, scaledPrice, scaledPrice);
+            MakerTrade.newMakerTrade(owner.getName(), scaledPrice, stocks.get(position), position, scaledPrice, scaledPrice);
         }
     }
 
@@ -147,4 +182,67 @@ public class MultiMarketMaker extends MarketMaker {
         this.probabilities = probabilities;
     }
     
+    synchronized void setStock(Position position, Quantity quantity) {
+        stocks.put(position, quantity);
+    }
+
+    public synchronized Map getStocks() {
+        return stocks;
+    }
+    
+    
+    synchronized void setStocks(Map<Position, Quantity> quatities) {
+        this.stocks = quatities;
+    }
+    
+    public synchronized Quantity currentStock(Position position) {
+        return stocks.get(position);
+    }
+
+    Quantity incrC(Position position, Probability targetProbability) {
+        Quantity q = Spherical.incrC(position, currentProbability(position), targetProbability, stocks, getBetaSpherical(), numOutcomes);
+        System.out.println("Calculated q incrC:" + q);
+        return q;
+    }
+
+    /** what would the probability be after buying QUANT coupons? */
+    private Probability newPFromIncrC(Position position, Quantity quantity) {
+        Probability prob = Spherical.newPFromIncrC(position, quantity, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
+        System.out.println("Calculated newPFromIncrC:" + prob);
+        return prob;
+    }
+
+    /** The money price charged to move the probability from p to newP is |B * log((1 - newP)/(1 - p)| * couponCost*/
+    protected Quantity baseC(Position position, Probability targetProbability) {
+        System.out.println("Stocks baseC:" + stocks);
+        Quantity q = Spherical.baseC(position, currentProbability(position), targetProbability, stocks, getBetaSpherical(), numOutcomes);
+        System.out.println("Calculated q baseC:" + q);
+        return q;
+    }
+
+    /** what would the probability be after spending COST?   After spending COST,
+     the user has gained COST new pairs, and will trade the undesired coupons for
+     desirable ones.  The new probability will be (1 - ((1-p)*exp(COST)).   */
+    Probability newPFromBaseC(Position position, Quantity cost) {
+        Probability prob = Spherical.newPFromBaseC(position, cost, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
+        System.out.println("Calculated newPFromBaseC:" + prob);
+        return prob;
+    }
+
+    private Probability newPFromTotalC(Position position, Quantity totalC) {
+        Probability prob = Spherical.newPFromTotalC(position, totalC, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
+        System.out.println("Calculated newPFromTotalC:" + prob);
+        return prob;
+    }
+
+    //  totalC is |baseC - incrC|.  (BaseC and IncrC have opposite signs)
+    //  baseC = beta*|log((1 - newP) / (1 - p))|      incrC =  beta*|log(newProb/prob)|
+    //     totalC = beta * | log((1 - newP) / (1 - p)) / (newProb/prob)) |
+    //  so totalC = beta * | log(newP * (1 - p) / (p * (1 - newP))) |
+    private Quantity totalC(Position position, Probability newP) {
+        Quantity q = Spherical.totalC(position, currentProbability(position), newP, stocks, getBetaSpherical(), numOutcomes);
+        System.out.println("Calculated q totalC:" + q);
+        return q;
+    }
+
 }

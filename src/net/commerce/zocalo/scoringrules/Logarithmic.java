@@ -8,7 +8,7 @@ import net.commerce.zocalo.currency.Quantity;
 
 public class Logarithmic extends ScoringRule {
 
-    public Logarithmic(Quantity endowment, Quantity maxPrice, int num) {
+    /*public Logarithmic(Quantity endowment, Quantity maxPrice, int num) {
         this.numOutcomes = num;
         initBeta(endowment, maxPrice);
     }
@@ -16,42 +16,42 @@ public class Logarithmic extends ScoringRule {
     protected void initBeta(Quantity endowment, Quantity maxPrice) {
         Quantity logOutcomes = new Quantity(Math.log(numOutcomes));
         this.beta = endowment.div(maxPrice).div(logOutcomes).asValue().doubleValue();
+    }*/
+
+    public static Quantity incrC(Position position, Probability curP,
+            Probability targetP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
+        return beta.times(targetP.div(curP).absLog());
     }
 
-    public Quantity incrC(Position position, Probability curP,
-            Probability targetP, Map<Position, Quantity> stocks) {
-        return getBeta().times(targetP.div(curP).absLog());
-    }
-
-    public Quantity baseC(Position position, Probability curP,
-            Probability targetP, Map<Position, Quantity> stocks) {
+    public static Quantity baseC(Position position, Probability curP,
+            Probability targetP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
         Probability currentInverted = curP.inverted();
         Probability targetInverted = targetP.inverted();
         if (targetInverted.isZero() || currentInverted.isZero()) {
             throw new ArithmeticException("probabilities can't be zero or one.");
         }
-        return getBeta().times(targetInverted.div(currentInverted).absLog());
+        return beta.times(targetInverted.div(currentInverted).absLog());
     }
 
-    public Quantity totalC(Position position, Probability curP,
-            Probability targetP, Map<Position, Quantity> stocks) {
+    public static Quantity totalC(Position position, Probability curP,
+            Probability targetP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
         Probability curPNot = curP.inverted();
         Probability targetPNot = targetP.inverted();
-        return getBeta().times(targetP.times(curPNot).div(curP.times(targetPNot)).absLog());    }
+        return beta.times(targetP.times(curPNot).div(curP.times(targetPNot)).absLog());    }
 
-    public Probability newPFromIncrC(Position position, Quantity limit,
-            Probability curP, Map<Position, Quantity> stocks) {
-        return new Probability(curP.times(limit.div(getBeta()).exp()));    }
+    public static Probability newPFromIncrC(Position position, Quantity limit,
+            Probability curP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
+        return new Probability(curP.times(limit.div(beta).exp()));    }
 
-    public Probability newPFromBaseC(Position position, Quantity limit,
-            Probability curP, Map<Position, Quantity> stocks) {
-        Quantity baseC = limit.div(getBeta());
+    public static Probability newPFromBaseC(Position position, Quantity limit,
+            Probability curP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
+        Quantity baseC = limit.div(beta);
         Probability curPNot = curP.inverted();
         return new Probability(curPNot.div(baseC.exp())).inverted();    }
 
-    public Probability newPFromTotalC(Position position, Quantity limit,
-            Probability curP, Map<Position, Quantity> newParam) {
-        Quantity expTotalC = limit.div(getBeta()).exp();
+    public static Probability newPFromTotalC(Position position, Quantity limit,
+            Probability curP, Map<Position, Quantity> newParam, Quantity beta, int numOutcomes) {
+        Quantity expTotalC = limit.div(beta).exp();
         Probability curPNot = curP.inverted();
         return new Probability(curP.div(curP.plus(curPNot.times(expTotalC))));
     }

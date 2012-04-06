@@ -117,6 +117,7 @@ public class ClaimPurchase extends UserPage {
             positionName = "";
             redirectResult(request, response);
         } else {
+            System.out.println("market" + market);
             if (! market.isOpen()) {
                 getUser().warn(MARKET_CLOSED);
                 return;
@@ -206,6 +207,7 @@ public class ClaimPurchase extends UserPage {
 
             String costString = request.getParameter(row + "cost");
             boolean costLimit = costString != null && ! "".equals(costString);
+            System.out.println("Costlimit?" + costLimit);
             setPrice(priceString);
             setCost(costString);
             Quantity p = p();

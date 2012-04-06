@@ -73,6 +73,8 @@ public abstract class Market {
         if (! hasMaker()) {
             return Probability.NEVER;
         }
+        System.out.println("1.stocks:" + ((MultiMarketMaker) getMaker()).getStocks());
+        System.out.println("2.prob" + getMaker().currentProbability(position));
         return getMaker().currentProbability(position);
     }
 

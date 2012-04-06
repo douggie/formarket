@@ -8,60 +8,55 @@ import net.commerce.zocalo.currency.Quantity;
 
 public class Quadratic extends ScoringRule {
 
-    public Quadratic(Quantity endowment, Quantity maxPrice, int num) {
+    /*public Quadratic(Quantity endowment, Quantity maxPrice, int num) {
         this.numOutcomes = num;
         initBeta(endowment, maxPrice);
     }
     
     protected void initBeta(Quantity endowment, Quantity maxPrice) {
         this.beta = endowment.times(new Quantity(numOutcomes)).div(new Quantity(numOutcomes-1)).div(maxPrice).asValue().doubleValue();
-    }
+    }*/
 
-    public Quantity incrC(Position position, Probability curP,
-            Probability targetP, Map<Position, Quantity> stocks) {
+    public static Quantity incrC(Position position, Probability curP,
+            Probability targetP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
         Quantity p=curP.asQuantity();
         Quantity pp=targetP.asQuantity();
-        return (pp.minus(p)).times(pp.plus(p).minus(new Quantity(2.0))).times(getBeta().times(outcomeCount())).div(outcomeCount().minus(new Quantity(1))).abs();
+        return (pp.minus(p)).times(pp.plus(p).minus(new Quantity(2.0))).times(beta.times(new Quantity(numOutcomes))).div(new Quantity(numOutcomes).minus(new Quantity(1))).abs();
     }
 
-    public Quantity baseC(Position position, Probability curP,
-            Probability targetP, Map<Position, Quantity> stocks) {
+    public static Quantity baseC(Position position, Probability curP,
+            Probability targetP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
         Probability currentInverted = curP.inverted();
         Probability targetInverted = targetP.inverted();
         if (targetInverted.isZero() || currentInverted.isZero()) {
             throw new ArithmeticException("probabilities can't be zero or one.");
         }
-        return getBeta().times(outcomeCount()).div(outcomeCount().minus(new Quantity(1))).times(targetP.times(targetP).minus(curP.times(curP))).abs();
+        return beta.times(new Quantity(numOutcomes)).div(new Quantity(numOutcomes).minus(new Quantity(1))).times(targetP.times(targetP).minus(curP.times(curP))).abs();
     }
 
-    private Quantity outcomeCount() {
-        // TODO Auto-generated method stub
-        return new Quantity(numOutcomes);
-    }
-
-    public Quantity totalC(Position position, Probability curP,
-            Probability targetP, Map<Position, Quantity> stocks) {
+    public static Quantity totalC(Position position, Probability curP,
+            Probability targetP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
         Quantity p=curP.asQuantity();
         Quantity pp=targetP.asQuantity();
-        return getBeta().times(outcomeCount().times(new Quantity(2)).div(outcomeCount().minus(new Quantity(1)))).times(pp.minus(p)).abs();
+        return beta.times(new Quantity(numOutcomes).times(new Quantity(2)).div(new Quantity(numOutcomes).minus(new Quantity(1)))).times(pp.minus(p)).abs();
     }
 
-    public Probability newPFromIncrC(Position position, Quantity limit,
-            Probability curP,  Map<Position, Quantity> stocks) {
-        return new Probability((outcomeCount().minus(new Quantity(1)).times(limit).div(getBeta().times(outcomeCount().times(new Quantity(2.0))))));
+    public static Probability newPFromIncrC(Position position, Quantity limit,
+            Probability curP,  Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
+        return new Probability((new Quantity(numOutcomes).minus(new Quantity(1)).times(limit).div(beta.times(new Quantity(numOutcomes).times(new Quantity(2.0))))));
     }
 
-    public Probability newPFromBaseC(Position position, Quantity limit,
-            Probability curP,  Map<Position, Quantity> stocks) {
-        Quantity baseC = limit.div(getBeta());
-        Quantity frac=(outcomeCount().minus(Quantity.ONE)).div(outcomeCount());
+    public static Probability newPFromBaseC(Position position, Quantity limit,
+            Probability curP,  Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
+        Quantity baseC = limit.div(beta);
+        Quantity frac=(new Quantity(numOutcomes).minus(Quantity.ONE)).div(new Quantity(numOutcomes));
         
         return new Probability((baseC.times(frac).plus(curP.times(curP))).sqrt());
     }
 
-    public Probability newPFromTotalC(Position position, Quantity limit,
-            Probability curP,  Map<Position, Quantity> stocks) {
-        Quantity q=limit.times(outcomeCount().minus(new Quantity(1))).div(getBeta().times(new Quantity(2)).times(outcomeCount()));
+    public static Probability newPFromTotalC(Position position, Quantity limit,
+            Probability curP,  Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
+        Quantity q=limit.times(new Quantity(numOutcomes).minus(new Quantity(1))).div(beta.times(new Quantity(2)).times(new Quantity(numOutcomes)));
         return new Probability(curP.minus(q));
     }
 

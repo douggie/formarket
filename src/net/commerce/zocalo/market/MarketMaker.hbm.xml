@@ -20,6 +20,12 @@
         <component name="beta" class="net.commerce.zocalo.currency.Quantity" unique="false">
             <property column="beta" name="quant"/>
         </component>
+        <component name="betaQuadratic" class="net.commerce.zocalo.currency.Quantity" unique="false">
+            <property column="betaQuadratic" name="quant"/>
+        </component>
+        <component name="betaSpherical" class="net.commerce.zocalo.currency.Quantity" unique="false">
+            <property column="betaSpherical" name="quant"/>
+        </component>
         <many-to-one name="market" unique="true" not-null="true" class="Market" />
         <many-to-one name="accounts" cascade="all" unique="true" not-null="true" class="net.commerce.zocalo.currency.Accounts" />
 
@@ -35,6 +41,13 @@
                 <map-key-many-to-many column="POSITIONS_ID" class="net.commerce.zocalo.claim.Position" />
                 <composite-element class="net.commerce.zocalo.currency.Probability">
                     <property column="probability" name="quant" />
+                </composite-element>
+            </map>
+            <map name="stocks" lazy="true" table="MM_Stocks">
+                <key column="MARKETMAKER_ID"/>
+                <map-key-many-to-many column="POSITIONS_ID" class="net.commerce.zocalo.claim.Position" />
+                <composite-element class="net.commerce.zocalo.currency.Quantity">
+                    <property column="stock" name="quant" />
                 </composite-element>
             </map>
         </subclass>

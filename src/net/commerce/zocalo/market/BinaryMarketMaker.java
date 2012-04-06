@@ -31,9 +31,9 @@ public class BinaryMarketMaker extends MarketMaker {
         Position[] positions = market.getClaim().positions();
         System.out.println("Number of positions in binary market:" + positions.length);
         numOutcomes = 2;
-        stocks = new HashMap<Position, Quantity>(positions.length);
+        //stocks = new HashMap<Position, Quantity>(positions.length);
         for (int i = 0; i < numOutcomes; i++) {
-            stocks.put(positions[i], Quantity.ZERO);
+            //stocks.put(positions[i], Quantity.ZERO);
         }
     }
 

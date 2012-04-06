@@ -95,15 +95,16 @@ import org.apache.log4j.Logger;
 
 public abstract class MarketMaker {
     private Quantity beta; //unused
+    private Quantity betaQuadratic; //unused
+    private Quantity betaSpherical; //unused
     private Accounts accounts;
     private Market market;
     private long id;
     public static final double EPSILON = 0.0001;
-    protected Map<Position, Quantity> stocks;
     protected int numOutcomes;
-    private Logarithmic logScoringRule;
-    private Quadratic quadraticScoringRule;
-    private Spherical sphericalScoringRule;
+    protected Logarithmic logScoringRule;
+    protected Quadratic quadraticScoringRule;
+    protected Spherical sphericalScoringRule;
 
     public MarketMaker(Market market, Quantity subsidy, User owner) {
         this.market = market;
@@ -120,10 +121,11 @@ public abstract class MarketMaker {
     }
 
     void initBeta(Quantity endowment, int outcomeCount) {
-        /** Do nothing as the initialization is being taken care of by the scoring rule**/
+        /** Do nothing as the initialization is being taken care of by the scoring rule
+        System.out.println("init done");
         logScoringRule = new Logarithmic(endowment, maxPrice(), outcomeCount);
         quadraticScoringRule = new Quadratic(endowment, maxPrice(), outcomeCount);
-        sphericalScoringRule = new Spherical(endowment, maxPrice(), outcomeCount);
+        sphericalScoringRule = new Spherical(endowment, maxPrice(), outcomeCount);**/
     }
 
     /** @deprecated */
@@ -381,28 +383,28 @@ public abstract class MarketMaker {
         |baseC - incrC| (=totalC) in coupons. */
 
     Quantity incrC(Position position, Probability targetProbability) {
-        return sphericalScoringRule.incrC(position, currentProbability(position), targetProbability, stocks);
+        return null;
     }
 
     /** what would the probability be after buying QUANT coupons? */
     private Probability newPFromIncrC(Position position, Quantity quantity) {
-        return sphericalScoringRule.newPFromIncrC(position, quantity, currentProbability(position), stocks);
+        return null;
     }
 
     /** The money price charged to move the probability from p to newP is |B * log((1 - newP)/(1 - p)| * couponCost*/
     protected Quantity baseC(Position position, Probability targetProbability) {
-        return sphericalScoringRule.baseC(position, currentProbability(position), targetProbability, stocks);
+        return null;
     }
 
     /** what would the probability be after spending COST?   After spending COST,
      the user has gained COST new pairs, and will trade the undesired coupons for
      desirable ones.  The new probability will be (1 - ((1-p)*exp(COST)).   */
     Probability newPFromBaseC(Position position, Quantity cost) {
-        return sphericalScoringRule.newPFromBaseC(position, cost, currentProbability(position), stocks);
+        return null;
     }
 
     private Probability newPFromTotalC(Position position, Quantity totalC) {
-        return sphericalScoringRule.newPFromTotalC(position, totalC, currentProbability(position), stocks);
+        return null;
     }
 
     //  totalC is |baseC - incrC|.  (BaseC and IncrC have opposite signs)
@@ -410,7 +412,7 @@ public abstract class MarketMaker {
     //     totalC = beta * | log((1 - newP) / (1 - p)) / (newProb/prob)) |
     //  so totalC = beta * | log(newP * (1 - p) / (p * (1 - newP))) |
     private Quantity totalC(Position position, Probability newP) {
-        return sphericalScoringRule.totalC(position, currentProbability(position), newP, stocks);
+        return null;
     }
 
     /** return my accounts only if the requestor knows my market's couponBank.  Since Market doesn't
@@ -464,23 +466,6 @@ public abstract class MarketMaker {
         return getMarket().maxPrice();
     }
 
-    synchronized void setStock(Position position, Quantity quantity) {
-        stocks.put(position, quantity);
-    }
-
-    public synchronized Map getStocks() {
-        return stocks;
-    }
-    
-    
-    synchronized void setStocks(Map<Position, Quantity> quatities) {
-        this.stocks = quatities;
-    }
-    
-    public synchronized Quantity currentStock(Position position) {
-        return stocks.get(position);
-    }
-
     //Also unused except in hibernate
     Quantity beta() {
         return getBeta();
@@ -497,5 +482,33 @@ public abstract class MarketMaker {
     private Quantity getBeta() {
         // TODO Auto-generated method stub
         return beta;
+    }
+
+    /**
+     * @return the betaQuadratic
+     */
+    public Quantity getBetaQuadratic() {
+        return betaQuadratic;
+    }
+
+    /**
+     * @param betaQuadratic the betaQuadratic to set
+     */
+    public void setBetaQuadratic(Quantity betaQuadratic) {
+        this.betaQuadratic = betaQuadratic;
+    }
+
+    /**
+     * @return the betaSpherical
+     */
+    public Quantity getBetaSpherical() {
+        return betaSpherical;
+    }
+
+    /**
+     * @param betaSpherical the betaSpherical to set
+     */
+    public void setBetaSpherical(Quantity betaSpherical) {
+        this.betaSpherical = betaSpherical;
     }
 }
