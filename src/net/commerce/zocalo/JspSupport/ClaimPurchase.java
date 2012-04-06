@@ -523,6 +523,17 @@ public class ClaimPurchase extends UserPage {
         String purchasePage = ClaimPurchase.claimPurchasePage(getUser());
         SortedSet<Position> sorted = market.getClaim().sortPositions();
         Dictionary<Position, String> shortNames = makeAliasDictionary(sorted);
+        int index = 0;
+        String[] logos = {"<img src=images/Logo/Team/mi.jpg>",
+				"<img src=images/Logo/Team/rcb.jpg",
+				"<img src=images/Logo/Team/csk.jpg",
+				"<img src=images/Logo/Team/pwi.jpg",
+				"<img src=images/Logo/Team/kxi.jpg",
+				"<img src=images/Logo/Team/dd.jpg",
+				"<img src=images/Logo/Team/kkr.jpg",
+				"<img src=images/Logo/Team/deccan.jpg",
+				"<img src=images/Logo/Team/rr.jpg"
+			};
 
         buf.append(HtmlSimpleElement.simplePostFormHeader(purchasePage, "", "claimName", getClaimName()));
 
@@ -532,8 +543,9 @@ public class ClaimPurchase extends UserPage {
         t.add("id", "buysell");
         t.render(buf);
         buf.append("  <tr>\n" +
-                "\t<th rowspan=2>Prediction\n" +
-                "\t<th rowspan=2 align=center>Current<br>Price\n" +
+        		"\t<th rowspan=2>Team Logo\n"+
+                "\t<th rowspan=2>Teams\n" +
+                "\t<th rowspan=2 align=center>Current Share Price\n" +
                 "\t<th colspan=2>Buy or<br>Sell Until\n" +
                 "  <tr>\n" +
                 "\t<th>price goes<br>to ...\n" +
@@ -544,7 +556,7 @@ public class ClaimPurchase extends UserPage {
             Position position =  iter.next();
             String price = market.currentProbability(position).printAsCents();
             String name = position.getName();
-
+           
             String defaultCost = " value='100' ";
             String defaultPrice = "";
             String chosenString = "";
@@ -560,7 +572,7 @@ public class ClaimPurchase extends UserPage {
             }
 
             String rowTemplate =
-    "    <tr$chosen$ id=$id$> <td>$label$\n" +
+    "    <tr$chosen$ id=$id$> <td align=center>$teamLogo$\n</td> <td>$label$\n" + 
     "        <td align='center'><span id='$row$Latest'>$price$&cent;</span><span style='float:right;opacity:0' id='$row$Reference'>$price$&cent;</span>\n" +
     "          <input type=hidden name='$row$Reference' value='$price$'>\n" +
     "        <td align='center'>\n" +
@@ -568,6 +580,7 @@ public class ClaimPurchase extends UserPage {
     "        <td align='center'>\\$\n" +
     "          <input type=text size=3 maxLength=4 name='$row$cost' $defaultCost$  onchange=\"highlight('$id$')\" autocomplete='off' >\n";
             StringTemplate row = new StringTemplate(rowTemplate);
+            row.setAttribute("teamLogo",logos[index]);
             row.setAttribute("label", name);
             row.setAttribute("id", shortNames.get(position));
             row.setAttribute("price", price);
@@ -577,6 +590,7 @@ public class ClaimPurchase extends UserPage {
             row.setAttribute("defaultPrice", defaultPrice);
 
             buf.append(row.toString());
+            index++;
         }
 
         buf.append("</table>\n");
