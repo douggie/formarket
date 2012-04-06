@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>SuvamZocalo: Create New Account</title>
+<title>IPL: Create New Account</title>
 <!--
 Copyright 2007-2009 Chris Hibbert.  All rights reserved.
 
@@ -18,7 +18,7 @@ of which has been included with this distribution in the LICENSE file.
 <% createAccount.beginTransaction(); %>
 <% createAccount.processRequest(request, response); %>
 <p align="center">
-<img src="images/logo.zocalo.jpg" height=81 width=250 align="center"><br>
+<img src="images/Logo/createAccountLogo.gif">
 </p>
 <p>
 <h2 align="center">Create a new Account</h2>
@@ -26,21 +26,21 @@ of which has been included with this distribution in the LICENSE file.
 <p>
 
 <form method=POST action="createAccount.jsp">
-<table border=5 cellpadding="0" cellspacing=0  width=90% align="center">
+<table border=5 cellpadding="0" cellspacing=0  width=100% align="center">
     <tr>
-        <td align=right><font size=5>Username: </font>:
+        <td align=center><font size=5>Username: 	</font>:
     </td><td>
         <input type=text size="10" name=userName value='<%= createAccount.getUserNameForWeb() %>'><br>
         </td>
     </tr><tr>
-        <td align=right> <font size=5>Account Password: </font>:</td>
+        <td align=center> <font size=5>Account Password: </font>:</td>
         <td><input type=password size="10" name="password"></td>
     </tr><tr>
-        <td align=right><font size=5>Retype Password: </font>
+        <td align=center><font size=5>Retype Password: </font>
         </td>
         <td><input type=password size="10" name="password2"></td>
     </tr><tr>
-        <td align=right> <font size=5>Email Address: </font><br> <small>(confirmation will be required) </small>:
+        <td align=center> <font size=5>Email Address: </font><br> <small>(confirmation will be required) </small>:
         </td>
         <td>
             <input type=text size="10" name="emailAddress" value="<%= createAccount.getEmailAddressForWeb() %>">
