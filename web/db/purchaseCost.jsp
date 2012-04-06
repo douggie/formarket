@@ -2,7 +2,7 @@
 <head>
 <jsp:useBean id="claim" scope="request" class="net.commerce.zocalo.JspSupport.ClaimPurchase" />
 <jsp:setProperty name="claim" property="*" />
-<title>Claim Details <%= claim.getClaimName() %></title>
+<title>Trading is now on for the <%= claim.getClaimName() %></title>
 <!--
 Copyright 2008, 2009 Chris Hibbert.  All rights reserved.
 
@@ -13,14 +13,16 @@ of which has been included with this distribution in the LICENSE file.
     <script type="text/javascript" src="reactiveIssue.js"></script>
 </head>
 <body onLoad="onload_actions()" onunload="unsubscribeAll()">
-
+<p align=center>
+<img src="images/Logo/purchaseCost.jsp">
+</p>
 <% claim.beginTransaction(); %>
 <% claim.processRequest(request, response); %>
-
-<%= claim.navButtons() %>  Welcome, <%= claim.getUserName() %>.
+<hr>
+<font size=5 color=blue><b><%= claim.navButtons() %>  Welcome, <%= claim.getUserName() %></font></b>.
 
 <br>
-<h2 align="center"><%= claim.displayClaimName() %></h2>
+<h1 align="center"><%= claim.displayClaimName() %></h1>
 <table align=center cellPadding=0>
     <tr><td bgcolor="dadbec">
         <p class="claimDescription-wide"><%= claim.getClaimDescription() %></p>
