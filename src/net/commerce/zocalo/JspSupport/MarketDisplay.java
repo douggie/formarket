@@ -35,8 +35,8 @@ public class MarketDisplay extends UserPage {
             "<table id='orders_table' width='30%' align='center' border='0' cellspacing='2'>\n";
     final static private String[] BINARY_COL_LABELS = new String[]
             { "Market", "Market Maker's Price Level", "Best Buy Offer", "Best Sell Offer", "owner" };
-    final static private String[] MULTIMARKET_COL_LABELS = new String[] {"Market", "Positions", "Owner"};
-    final static private String[] CLOSED_COL_LABELS = new String[] {"Market", "Positions", "owner", "outcome", };
+    final static private String[] MULTIMARKET_COL_LABELS = new String[] {"League", "Teams", "Market Created by"};
+    final static private String[] CLOSED_COL_LABELS = new String[] {"League", "Teams", "Market Created by", "Outcome", };
 
     private String marketName;
     private String marketMakerEndowment;
@@ -69,7 +69,7 @@ public class MarketDisplay extends UserPage {
         if (user == null) {
             return "";
         }
-        return HtmlSimpleElement.labelledLine("Cash", "$" + user.cashOnHand().printAsDollars());
+        return HtmlSimpleElement.labelledLine("<font size=5 color=red><b>Your present available Cash balance is: ", "$" + user.cashOnHand().printAsDollars()+"</b></font>");
     }
 
     private void printOpenBinaryMarkets(StringBuffer buf) {
@@ -103,7 +103,7 @@ public class MarketDisplay extends UserPage {
     private void printOpenMultiMarkets(StringBuffer buf) {
         Iterator iterator = HibernateUtil.allOpenMultiMarkets().iterator();
         if (iterator.hasNext()) {
-            buf.append("<p><h2><b><center>Multi-outcome Markets</center></b></h2>");
+            buf.append("<p align=center><font size=5 color=blue><b><i>The Indian Institute of Science Prediction League</b></i></font>");
             printMarketTableStart(buf);
             HtmlSimpleElement.headerRow(buf, MULTIMARKET_COL_LABELS);
             String name = ClaimPurchase.claimPurchasePage(getUser());
@@ -155,7 +155,7 @@ public class MarketDisplay extends UserPage {
     }
 
     private void printMarketTableStart(StringBuffer buf) {
-        HtmlTable.start(buf, "lightgrey", HtmlTable.TABLE_WIDTH, "80");
+        HtmlTable.start(buf, "lightgrey", HtmlTable.TABLE_WIDTH, "100");
     }
 
     static public HtmlElement currentEstimateCell(Market market, BinaryClaim claim) {
