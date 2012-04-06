@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Available Markets</title>
+<title>The IISC Prediction League</title>
 <!--
 Copyright 2007-2009 Chris Hibbert.  All rights reserved.
 Copyright 2005, 2006 CommerceNet Consortium, LLC.  All rights reserved.
@@ -15,18 +15,20 @@ of which has been included with this distribution in the LICENSE file.
 </head>
 <body>
 <p align=center>
-<font size = 7><b> Available Markets</b></font>
+<img src="images/Logo/MarketJsp.gif">
 </p>
 <p align=left>
-<font size=5>Below you'll find the markets which are presently active. Select a market.</font>
-
+<font size = 5><b> Below you'll find the league which is presently active. Just click on it 
+					to get started.</b></font>
+</p>
+<p align=left>
 <% markets.beginTransaction(); %>
 <% markets.processRequest(request, response); %>
 
 <%= markets.navButtons() %>
 
-<p>
-<h2 align="center">You're logged in as: <%= markets.getUserName() %></h2>
+<p align=center>
+<font size=5 color=red><b>You're logged in as: <%= markets.getUserName() %></b></font>
 <%= markets.getCashBalanceDisplay() %>
 <p>
 
