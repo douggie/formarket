@@ -185,13 +185,16 @@ public class Spherical extends ScoringRule {
         Quantity sum = new Quantity(beta);
         double q = getStockFromProbability(position, p, beta, numOutcomes, stocks).asValue().doubleValue();
         System.out.println("q getCostValue:" + q);
-        double const1 = getConstantSumStocks(position, 1, stocks);
+        /*double const1 = getConstantSumStocks(position, 1, stocks);
         System.out.println("const1 getCostValue" + const1);
         double prob = p.asValue().doubleValue();
         System.out.println("prob getCostValue" + prob);
         double temp = ((q + const1) * prob - q) / (numOutcomes * prob - 1);
         System.out.println("temp getCostValue" + temp);
-        return sum.plus(new Quantity(temp));
+        return sum.plus(new Quantity(temp));*/
+        Map<Position, Quantity> quantities = stocks;
+        stocks.put(position, new Quantity(q));
+        return new Quantity(C(quantities, beta, numOutcomes));
     }
     
     public static Quantity getStockFromProbability(Position position, Probability p, double beta, int numOutcomes, Map<Position, Quantity> stocks) {

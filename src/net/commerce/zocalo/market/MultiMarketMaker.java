@@ -207,7 +207,7 @@ public class MultiMarketMaker extends MarketMaker {
     }
 
     /** what would the probability be after buying QUANT coupons? */
-    private Probability newPFromIncrC(Position position, Quantity quantity) {
+    protected Probability newPFromIncrC(Position position, Quantity quantity) {
         numOutcomes = market.getClaim().positions().length;
         Probability prob = Spherical.newPFromIncrC(position, quantity, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
         System.out.println("Calculated newPFromIncrC:" + prob);
@@ -233,7 +233,7 @@ public class MultiMarketMaker extends MarketMaker {
         return prob;
     }
 
-    private Probability newPFromTotalC(Position position, Quantity totalC) {
+    protected Probability newPFromTotalC(Position position, Quantity totalC) {
         numOutcomes = market.getClaim().positions().length;
         Probability prob = Spherical.newPFromTotalC(position, totalC, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
         System.out.println("Calculated newPFromTotalC:" + prob);
@@ -244,7 +244,7 @@ public class MultiMarketMaker extends MarketMaker {
     //  baseC = beta*|log((1 - newP) / (1 - p))|      incrC =  beta*|log(newProb/prob)|
     //     totalC = beta * | log((1 - newP) / (1 - p)) / (newProb/prob)) |
     //  so totalC = beta * | log(newP * (1 - p) / (p * (1 - newP))) |
-    private Quantity totalC(Position position, Probability newP) {
+    protected Quantity totalC(Position position, Probability newP) {
         Quantity q = Spherical.totalC(position, currentProbability(position), newP, stocks, getBetaSpherical(), numOutcomes);
         System.out.println("Calculated q totalC:" + q);
         return q;
