@@ -14,7 +14,7 @@ of which has been included with this distribution in the LICENSE file.
 </head>
 <body onLoad="onload_actions()" onunload="unsubscribeAll()">
 <p align=center>
-<img src="images/Logo/purchaseCost.jsp">
+<img src="images/Logo/purchaseCost.gif">
 </p>
 <% claim.beginTransaction(); %>
 <% claim.processRequest(request, response); %>
