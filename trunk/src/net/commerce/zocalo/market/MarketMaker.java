@@ -98,13 +98,10 @@ public abstract class MarketMaker {
     private Quantity betaQuadratic; //unused
     private Quantity betaSpherical; //unused
     private Accounts accounts;
-    private Market market;
+    protected Market market;
     private long id;
     public static final double EPSILON = 0.0001;
     protected int numOutcomes;
-    protected Logarithmic logScoringRule;
-    protected Quadratic quadraticScoringRule;
-    protected Spherical sphericalScoringRule;
 
     public MarketMaker(Market market, Quantity subsidy, User owner) {
         this.market = market;

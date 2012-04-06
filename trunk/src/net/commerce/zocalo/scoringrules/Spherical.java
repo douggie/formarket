@@ -29,16 +29,22 @@ public class Spherical extends ScoringRule {
             Probability targetP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
         System.out.println("Stocks baseC Spherical:" + stocks);
         double b = beta.asValue().doubleValue();
+        System.out.println("Beta Spherical baseC " + b);
         Quantity currentCost = getCostValue(position, curP, b, numOutcomes, stocks);
+        System.out.println("currentCost baseC" + currentCost);
         Quantity targetCost = getCostValue(position, targetP, b, numOutcomes, stocks);
+        System.out.println("targetCost baseC" + targetCost);
         return targetCost.minus(currentCost);
     }
 
     public static Quantity totalC(Position position, Probability curP,
             Probability targetP, Map<Position, Quantity> stocks, Quantity beta, int numOutcomes) {
         double b = beta.asValue().doubleValue();
+        System.out.println("Beta Spherical totalC " + b);
         Quantity currentStock = getStockFromProbability(position, curP, b, numOutcomes, stocks);
+        System.out.println("currentStock totalC" + currentStock);
         Quantity targetStock = getStockFromProbability(position, targetP, b, numOutcomes, stocks);
+        System.out.println("targetStock totalC" + targetStock);
         return targetStock.minus(currentStock);
     }
 
@@ -155,19 +161,22 @@ public class Spherical extends ScoringRule {
     }
     
     public static double getSumStocks(Map<Position, Quantity> stockMap, int power) {
-        System.out.println("Stocks" + stockMap);
-        System.out.println("Stock " + stockMap.values().size());
+        System.out.println("Stocks getSumStocks" + stockMap);
+        System.out.println("Stock getSumStocks" + stockMap.values().size());
         double sum = 0;
         for(Quantity q : stockMap.values()) {
             double term = Math.pow(q.asValue().doubleValue(), power);
             sum += term;
         }
+        System.out.println("sum getSumStocks" + sum);
         return sum;
     }
     
     public static double getConstantSumStocks(Position position, int power, Map<Position, Quantity> stocks) {
         double sum = getSumStocks(power, stocks);
+        System.out.println("sum getConstantSumStocks" + sum);
         double value = Math.pow(stocks.get(position).asValue().doubleValue(), power);
+        System.out.println("value getConstantSumStocks" + value);
         return sum - value;
     }
     
@@ -175,9 +184,13 @@ public class Spherical extends ScoringRule {
         System.out.println("Stocks baseC getCostValue:" + stocks);
         Quantity sum = new Quantity(beta);
         double q = getStockFromProbability(position, p, beta, numOutcomes, stocks).asValue().doubleValue();
+        System.out.println("q getCostValue:" + q);
         double const1 = getConstantSumStocks(position, 1, stocks);
+        System.out.println("const1 getCostValue" + const1);
         double prob = p.asValue().doubleValue();
+        System.out.println("prob getCostValue" + prob);
         double temp = ((q + const1) * prob - q) / (numOutcomes * prob - 1);
+        System.out.println("temp getCostValue" + temp);
         return sum.plus(new Quantity(temp));
     }
     
@@ -186,10 +199,14 @@ public class Spherical extends ScoringRule {
         double const1 = getConstantSumStocks(position, 1, stocks);
         double const2 = getConstantSumStocks(position, 2, stocks);
         double A = (numOutcomes - 1) * (temp + numOutcomes - 1);
+        System.out.println("A getStockFromProbability" + A);
         double B = const1 * (numOutcomes - 1 + temp);
+        System.out.println("B getStockFromProbability" + B);
         double const1sq = const1 * const1;
         double C = const1sq - temp * (const1sq + beta*beta*numOutcomes*numOutcomes - numOutcomes * const2);
+        System.out.println("C getStockFromProbability" + C);
         double solution = (B + Math.sqrt(B*B - A*C)) / A;
+        System.out.println("q getStockFromProbability" + solution);
         return new Quantity(solution);
     }
     
