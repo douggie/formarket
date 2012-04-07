@@ -102,8 +102,10 @@ public class Spherical extends ScoringRule {
         double b = beta;
         double qi = newq.get(position).asValue().doubleValue();
         
-        System.out.println("newP findNewP" + 1/n + (sumq1 - n*qi)/(n*Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)));
-        return new Probability(1/n + (sumq1 - n*qi)/(n*Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)));
+        System.out.println("Positive newP:" + (1/n + (sumq1 - n*qi)/(n*Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2))));
+        System.out.println("Negative newP:" + (1/n - (sumq1 - n*qi)/(n*Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2))));
+
+        return new Probability(1/n - (sumq1 - n*qi)/(n*Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)));
     }
 
     public static Probability newPFromBaseC(Position position, Quantity limitQuant,
@@ -163,13 +165,13 @@ public class Spherical extends ScoringRule {
     
     public static double getSumStocks(Map<Position, Quantity> stockMap, int power) {
         System.out.println("Stocks getSumStocks" + stockMap);
-        System.out.println("Stock getSumStocks" + stockMap.values().size());
+        System.out.println("Stock size getSumStocks" + stockMap.values().size());
         double sum = 0;
         for(Quantity q : stockMap.values()) {
             double term = Math.pow(q.asValue().doubleValue(), power);
             sum += term;
         }
-        System.out.println("sum getSumStocks" + sum);
+        System.out.println("sum power getSumStocks" + sum);
         return sum;
     }
     
@@ -220,7 +222,10 @@ public class Spherical extends ScoringRule {
         double n = numOutcomes;
         double b = beta;
         
-        return (sumq1/n + b + Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)/n);
+        System.out.println("Positive C:" + (sumq1/n + b + Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)/n));
+        System.out.println("Negative C:" + (sumq1/n + b - Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)/n));
+        
+        return (sumq1/n + b - Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)/n);
     }
 
 }

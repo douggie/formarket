@@ -235,6 +235,7 @@ public class MultiMarketMaker extends MarketMaker {
 
     protected Probability newPFromTotalC(Position position, Quantity totalC) {
         numOutcomes = market.getClaim().positions().length;
+        System.out.println("IN DESIRED newPFromTotalC");
         Probability prob = Spherical.newPFromTotalC(position, totalC, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
         System.out.println("Calculated newPFromTotalC:" + prob);
         return prob;

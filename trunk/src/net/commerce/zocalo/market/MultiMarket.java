@@ -121,6 +121,7 @@ public class MultiMarket extends Market {
         if (! quantityPurchased.isZero()) {
             updateLastTraded();
         }
+        System.out.println("quantity purchased:" + quantityPurchased);
         maker.setStock(position, maker.currentStock(position).plus(quantityPurchased));
         return quantityPurchased;
     }
