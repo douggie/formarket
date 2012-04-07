@@ -54,7 +54,7 @@ public class TradeHistory extends UserPage {
 
         StringBuffer buff = new StringBuffer();
         if (trades != null) {
-            HtmlTable.start(buff, "lightblue", new String[] { "claim", "date", "price", "quant" }, "orderTable");
+            HtmlTable.start(buff, "lightblue", new String[] { "Transaction", "Date", "Price", "Quantity of Shares exchanged" }, "orderTable");
             for (Iterator iterator = trades.iterator(); iterator.hasNext();) {
                 Trade trade = (Trade) iterator.next();
                 Position pos = trade.getPos();
