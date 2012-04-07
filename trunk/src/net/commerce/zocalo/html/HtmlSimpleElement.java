@@ -375,8 +375,6 @@ public class HtmlSimpleElement implements HtmlElement {
                     + "\n    </td>");
         }
         buf.append("<td>"+HtmlSimpleElement.newPageForm("Welcome.jsp", "Logout", "Welcome.jsp".equals(currentPage))+"</td>");
-        buf.append("<td>"+HtmlSimpleElement.newPageForm("Help.html", "Help", "Help.jsp".equals(currentPage))+"</td>");
-        buf.append("<td>"+HtmlSimpleElement.newPageForm("credits.jsp", "Credits", "credits.jsp".equals(currentPage))+"</td>");
         HtmlRow.endTag(buf);
         buf.append("\n<tr><td colspan='" + labels.length / 2 + "'><span id='belowNavButtons'>&nbsp;</span></td></tr>\n");
         HtmlTable.endTag(buf);

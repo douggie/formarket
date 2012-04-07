@@ -201,7 +201,7 @@ public class MultiMarketMaker extends MarketMaker {
 
     Quantity incrC(Position position, Probability targetProbability) {
         numOutcomes = market.getClaim().positions().length;
-        Quantity q = Spherical.incrC(position, currentProbability(position), targetProbability, stocks, getBetaSpherical(), numOutcomes);
+        Quantity q = Logarithmic.incrC(position, currentProbability(position), targetProbability, stocks, getBeta(), numOutcomes);
         System.out.println("Calculated q incrC:" + q);
         return q;
     }
@@ -209,7 +209,8 @@ public class MultiMarketMaker extends MarketMaker {
     /** what would the probability be after buying QUANT coupons? */
     protected Probability newPFromIncrC(Position position, Quantity quantity) {
         numOutcomes = market.getClaim().positions().length;
-        Probability prob = Spherical.newPFromIncrC(position, quantity, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
+        @SuppressWarnings("deprecation")
+		Probability prob = Logarithmic.newPFromIncrC(position, quantity, currentProbability(position), stocks, getBeta(), numOutcomes);
         System.out.println("Calculated newPFromIncrC:" + prob);
         return prob;
     }
@@ -218,7 +219,8 @@ public class MultiMarketMaker extends MarketMaker {
     protected Quantity baseC(Position position, Probability targetProbability) {
         numOutcomes = market.getClaim().positions().length;
         System.out.println("Stocks baseC:" + stocks);
-        Quantity q = Spherical.baseC(position, currentProbability(position), targetProbability, stocks, getBetaSpherical(), numOutcomes);
+        @SuppressWarnings("deprecation")
+		Quantity q = Logarithmic.baseC(position, currentProbability(position), targetProbability, stocks, getBeta(), numOutcomes);
         System.out.println("Calculated q baseC:" + q);
         return q;
     }
@@ -228,15 +230,16 @@ public class MultiMarketMaker extends MarketMaker {
      desirable ones.  The new probability will be (1 - ((1-p)*exp(COST)).   */
     Probability newPFromBaseC(Position position, Quantity cost) {
         numOutcomes = market.getClaim().positions().length;
-        Probability prob = Spherical.newPFromBaseC(position, cost, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
+        @SuppressWarnings("deprecation")
+		Probability prob = Logarithmic.newPFromBaseC(position, cost, currentProbability(position), stocks, getBeta(), numOutcomes);
         System.out.println("Calculated newPFromBaseC:" + prob);
         return prob;
     }
 
     protected Probability newPFromTotalC(Position position, Quantity totalC) {
         numOutcomes = market.getClaim().positions().length;
-        System.out.println("IN DESIRED newPFromTotalC");
-        Probability prob = Spherical.newPFromTotalC(position, totalC, currentProbability(position), stocks, getBetaSpherical(), numOutcomes);
+        @SuppressWarnings("deprecation")
+		Probability prob = Logarithmic.newPFromTotalC(position, totalC, currentProbability(position), stocks, getBeta(), numOutcomes);
         System.out.println("Calculated newPFromTotalC:" + prob);
         return prob;
     }
@@ -246,7 +249,8 @@ public class MultiMarketMaker extends MarketMaker {
     //     totalC = beta * | log((1 - newP) / (1 - p)) / (newProb/prob)) |
     //  so totalC = beta * | log(newP * (1 - p) / (p * (1 - newP))) |
     protected Quantity totalC(Position position, Probability newP) {
-        Quantity q = Spherical.totalC(position, currentProbability(position), newP, stocks, getBetaSpherical(), numOutcomes);
+        @SuppressWarnings("deprecation")
+		Quantity q = Logarithmic.totalC(position, currentProbability(position), newP, stocks, getBeta(), numOutcomes);
         System.out.println("Calculated q totalC:" + q);
         return q;
     }

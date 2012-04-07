@@ -77,7 +77,13 @@ of which has been included with this distribution in the LICENSE file.
 
 <% createAccount.commitTransaction(); %>
 
-<p>
+<hr>
+<p align=center>
+<font size=5><b><a href="pages/Credits.html">Credits</a><br> 	
+<a href="pages/Help.html">Click here for help</a>
+<hr>
+</p>
+
 
 </body>
 </html>

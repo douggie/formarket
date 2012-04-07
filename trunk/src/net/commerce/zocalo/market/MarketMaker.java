@@ -491,7 +491,7 @@ public abstract class MarketMaker {
 
     /** @deprecated */
     //Also unused except in hibernate
-    private Quantity getBeta() {
+    protected Quantity getBeta() {
         // TODO Auto-generated method stub
         return beta;
     }
