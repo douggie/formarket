@@ -209,14 +209,12 @@ public abstract class MarketMaker {
             paymentAmount = maxPrice().times(buying
                     ? baseC(position, affordableProb)
                     : incrC(position, affordableProb));
-            System.out.println("payment amount purchase : " + paymentAmount);
 
             quantityPurchased = sellCouponsToTrader(position, user, buying, paymentAmount, affordableProb);
         }
         if (! quantityPurchased.isZero() && ! paymentAmount.isZero() && ! quantityPurchased.isNegligible()) {
             recordTrade(user.getName(), quantityPurchased, paymentAmount, position, allStartProbs);
         }
-        System.out.println("quantity purchased, complementsBought:" + quantityPurchased + complementsBought);
         return quantityPurchased.plus(complementsBought);
     }
 
@@ -233,10 +231,8 @@ public abstract class MarketMaker {
 
         receiveCash(payment);
         quantityPurchased = totalC(position, affordableProb);
-        System.out.println("Quantity purchased sellCouponsToTrader" + quantityPurchased);
 
         Set coupons = provideCouponSet(position, quantityPurchased, buying);
-        System.out.println("Coupons ZERO DESIRED!!!!!!!!!!!!!!!!!!!!" + coupons);
         addAllCoupons(coupons, user);
         accounts().settle(market());
         scaleProbabilities(position, affordableProb);
@@ -251,26 +247,16 @@ public abstract class MarketMaker {
         Probability targetProb;
         if (buying) {
             availableCoupons = user.minCouponsVersus(position);
-            System.out.println("available coupons buyComplementsFromTrader" + availableCoupons);
             Probability affordableProb = newPFromTotalC(position, availableCoupons.negate());
-            System.out.println("Affordable, desiredProb" + affordableProb + desiredProb);
             targetProb = affordableProb.min(desiredProb);
-            /*if(targetProb.compareTo(desiredProb) != 0) {
-                System.out.println("target prob not equals desired prob buyComplementsFromTrader");
-            }*/
         } else {
             availableCoupons = user.couponCount(position);
-            System.out.println("available coupons buyComplementsFromTrader not buying" + availableCoupons);
             Probability affordableProb = newPFromTotalC(position, availableCoupons);
             targetProb = affordableProb.max(desiredProb);
-            /*if(targetProb.compareTo(desiredProb) != 0) {
-                System.out.println("target prob not equals desired prob buyComplementsFromTrader");
-            }*/
         }
         if (availableCoupons.isNegligible()) {
             return Quantity.ZERO;
         }
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!DANGER!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         Quantity couponsRequired = totalC(position, targetProb);
         if (couponsRequired.isZero()) {
@@ -415,7 +401,6 @@ public abstract class MarketMaker {
     }
 
     protected Probability newPFromTotalC(Position position, Quantity totalC) {
-        System.out.println("UNDESIRED LOCATION!!!!!");
         return null;
     }
 

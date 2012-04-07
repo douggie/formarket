@@ -36,9 +36,9 @@ public class SecureUser extends User {
         if (quant.isZero()) { return; }
 
         if (isBuy) {
-            warn("Bought " + quant.printAsQuantity() + " from MarketMaker.");
+            warn("Bought " + quant.printAsQuantity() + " shares of the team.");
         } else {
-            warn("Sold " + quant.printAsQuantity() + " to MarketMaker.");
+            warn("Sold " + quant.printAsQuantity() + " shares of the team.");
         }
     }
 

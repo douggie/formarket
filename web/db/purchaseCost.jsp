@@ -23,8 +23,8 @@ of which has been included with this distribution in the LICENSE file.
 
 <br>
 <h1 align="center"><%= claim.displayClaimName() %></h1>
-<table align=center cellPadding=0>
-    <tr><td bgcolor="dadbec">
+<table cellPadding=0>
+    <tr align=right><td bgcolor="dadbec">
         <p class="claimDescription-wide"><%= claim.getClaimDescription() %></p>
         <%= claim.buyOrEditClaimHtml() %>
         <% if (claim.getUser().hasWarnings() ) { %>
@@ -39,7 +39,7 @@ of which has been included with this distribution in the LICENSE file.
                 </table>
              </td>
         <% } %>
-    <td>
+    <td align=center>
         <% if (claim.marketHasBookOrders() ) { %>
         <img  src="<%= claim.historyChartNameForJsp() %>" width="<%= claim.getChartSize() %>" height="<%= claim.getChartSize() %>" id="PriceChart" alt="price chart">
         <% } else { %>

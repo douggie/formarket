@@ -24,7 +24,7 @@ public class AccountDisplay extends UserPage {
     static final public String ACCOUNT_JSP = "account.jsp";
     static final public String ACCOUNT_NAME = "account";
     static final public String PAGE_TITLE = "View Account";
-    static final public String HOLDINGS_LABEL = "Holdings";
+    static final public String HOLDINGS_LABEL = "The shares you own";
     public static final String HOLDINGS_BG_COLOR = "tan";
 
     public AccountDisplay() {
