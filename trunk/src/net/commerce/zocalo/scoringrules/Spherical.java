@@ -102,7 +102,8 @@ public class Spherical extends ScoringRule {
         double b = beta;
         double qi = newq.get(position).asValue().doubleValue();
         
-        return new Probability((1/n + (sumq1 - n*qi)/(n*Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2))));
+        System.out.println("newP findNewP" + 1/n + (sumq1 - n*qi)/(n*Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)));
+        return new Probability(1/n + (sumq1 - n*qi)/(n*Math.sqrt(sumq1*sumq1 + b*b*n*n - n*sumq2)));
     }
 
     public static Probability newPFromBaseC(Position position, Quantity limitQuant,
