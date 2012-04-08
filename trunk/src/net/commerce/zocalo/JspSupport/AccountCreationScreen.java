@@ -19,11 +19,11 @@ public class AccountCreationScreen extends LoginScreen {
     static final public String CREATE_ACCOUNT_JSP  = "createAccount.jsp";
     static final public String CREATE_ACCOUNT_NAME = "createAccount";
     static final public String CREATE_ACCOUNT      = "Create Account";
-    static final public String ACCOUNT_NOT_AVAILABLE = "Sorry! This account name is unavailable. Please try another one. ";
-    static final public String LOOK_FOR_CONFIRMATION = "We've sent you a confirmation email. To activate your account, please follow the instructions in the email.";
-    static final public String PASSWORD_WARNING    = "Oops! That password doesn't qualify! You must have at least 7 characters, with at least one being a number.";
-    static final public String NO_MATCH            = "Confirmation token didn't match account name.";
-    static final public String ACCOUNT_ALREADY_CONFIRMED = "Account already confirmed!";
+    static final public String ACCOUNT_NOT_AVAILABLE = "<font color=red size=5><b>Sorry! This account name is unavailable. Please try another one. </b></font>";
+    static final public String LOOK_FOR_CONFIRMATION = "<font color=red size=5><b>We've sent you a confirmation email. To activate your account, please follow the instructions in the email.</b></font>";
+    static final public String PASSWORD_WARNING    = "<font color=red size=5><b>Oops! That password doesn't qualify! You must have at least 7 characters, with at least one being a number.</b></font>";
+    static final public String NO_MATCH            = "<font color=red size=5><b>Confirmation token didn't match account name.</b></font>";
+    static final public String ACCOUNT_ALREADY_CONFIRMED = "<font color=red size=5><b>Account already confirmed!</b></font>";
 
     private boolean successfulCreation;
     private String emailAddress;
