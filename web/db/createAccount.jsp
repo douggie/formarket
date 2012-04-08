@@ -61,7 +61,7 @@ of which has been included with this distribution in the LICENSE file.
 
 <br>
 
-<form method=POST action='createAccount.jsp'>
+<!-- <form method=POST action='createAccount.jsp'>
     <label> <input type=button name='close' value='Enter Registration Details' onclick="toggleVisibility('confirmDetails');"></label>
     <div id='confirmDetails'>
         <table border=0 cellpadding="0" cellspacing=3>
@@ -73,7 +73,7 @@ of which has been included with this distribution in the LICENSE file.
                 <input type=button name=action value='Register'>
         </table>
     </div>
-</form>
+</form> -->
 
 <% createAccount.commitTransaction(); %>
 
